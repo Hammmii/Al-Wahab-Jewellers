@@ -10,19 +10,19 @@
     --card-foreground: 0 0% 98%;
     --popover: 20 14.3% 4.1%;
     --popover-foreground: 0 0% 98%;
-    --primary: 42 78% 34%;
-    --primary-foreground: 42 78% 95%;
+    --primary: 347 78% 70%;
+    --primary-foreground: 347 78% 95%;
     --secondary: 20 10% 15%;
     --secondary-foreground: 0 0% 98%;
     --muted: 20 10% 15%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 42 78% 34%;
+    --accent: 347 78% 70%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 20 10% 20%;
     --input: 20 10% 20%;
-    --ring: 42 78% 40%;
+    --ring: 347 78% 75%;
     --radius: 0.5rem;
   }
  
@@ -31,19 +31,19 @@
     --foreground: 0 0% 98%;
     --card: 20 14.3% 6.1%;
     --card-foreground: 0 0% 98%;
-    --primary: 42 78% 34%;
-    --primary-foreground: 42 78% 95%;
+    --primary: 347 78% 70%;
+    --primary-foreground: 347 78% 95%;
     --secondary: 20 10% 15%;
     --secondary-foreground: 0 0% 98%;
     --muted: 20 10% 15%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 42 78% 34%;
+    --accent: 347 78% 70%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 20 10% 20%;
     --input: 20 10% 20%;
-    --ring: 42 78% 40%;
+    --ring: 347 78% 75%;
   }
 }
 
@@ -84,7 +84,14 @@
       radial-gradient(circle at 25% 25%, hsla(var(--primary) / 0.1), transparent 30%),
       radial-gradient(circle at 75% 75%, hsla(var(--primary) / 0.1), transparent 30%);
     background-size: 100px 100px;
+    animation: move-pattern 20s linear infinite;
   }
+
+  @keyframes move-pattern {
+    from { background-position: 0 0; }
+    to { background-position: 200px 200px; }
+  }
+
 
   @keyframes fade-in-up {
     from {
