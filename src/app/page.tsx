@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -35,12 +36,12 @@ export default function Home() {
       <section className="relative h-[70vh] md:h-[90vh] w-full flex items-center justify-center text-center text-white overflow-hidden sparkle-bg">
         <div className="absolute inset-0 bg-black/70 z-10" />
         <Image
-          src="https://placehold.co/1920x1080"
+          src="https://storage.googleapis.com/aif-stg-testing-public-file-upload/users/20133658/1721758414451-image.jpeg"
           alt="Hero background"
           fill
           style={{objectFit: "cover"}}
           className="z-0 scale-110 blur-sm"
-          data-ai-hint="dark gold background"
+          data-ai-hint="gold necklace"
           priority
         />
         <div className="z-20 relative max-w-4xl p-4 flex flex-col items-center animate-fade-in-up">
