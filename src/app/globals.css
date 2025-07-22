@@ -96,4 +96,32 @@
       transform: translateY(0);
     }
   }
+
+  .sparkle-bg {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sparkle-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+    background-size: 25px 25px;
+    animation: sparkle 20s linear infinite;
+    opacity: 0.1;
+    transform-origin: 0 0;
+  }
+
+  @keyframes sparkle {
+    from {
+      transform: translate(0%, 0%);
+    }
+    to {
+      transform: translate(-50%, -50%);
+    }
+  }
 }
