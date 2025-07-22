@@ -19,7 +19,8 @@ export function ProductCard({ product }: ProductCardProps) {
               src={product.images[0]}
               alt={product.name}
               fill
-              className="object-cover w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-110"
+              style={{objectFit: 'cover'}}
+              className="w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-110"
               data-ai-hint="jewellery product"
             />
           </Link>

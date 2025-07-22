@@ -37,7 +37,8 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps) {
                       src={product.images[0]}
                       alt={product.name}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      style={{objectFit: 'cover'}}
+                      className="transition-transform duration-500 group-hover:scale-110"
                       data-ai-hint="jewellery piece"
                     />
                   </div>

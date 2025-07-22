@@ -56,11 +56,6 @@
   body {
     @apply bg-background text-foreground;
   }
-  section {
-     @apply animate-fade-in-up;
-     animation-delay: 200ms;
-     animation-fill-mode: both;
-  }
 }
 
 @layer utilities {
@@ -106,6 +101,10 @@
     }
   }
 
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-in-out forwards;
+  }
+  
   .sparkle-bg {
     position: relative;
     overflow: hidden;

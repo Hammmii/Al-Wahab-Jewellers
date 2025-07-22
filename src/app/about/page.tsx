@@ -15,7 +15,7 @@ export default function AboutPage() {
           src="https://placehold.co/1920x800"
           alt="Al-Wahab Jewellers workshop"
           fill
-          objectFit="cover"
+          style={{objectFit: "cover"}}
           className="z-0"
           data-ai-hint="goldsmith workshop"
         />
@@ -30,7 +30,7 @@ export default function AboutPage() {
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="animate-fade-in-up">
+            <div className="animate-fade-in-up" style={{animationDelay: '0ms'}}>
               <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">Our Story: The Goldsmith's Heritage</h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 Founded by the visionary artisan, Sheikh Abdul Wahab, our journey began in the bustling lanes of old Lahore. With a passion for perfection and an unwavering commitment to quality, he laid the foundation for a legacy that would be cherished for generations.
