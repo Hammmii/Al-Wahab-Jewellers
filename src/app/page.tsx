@@ -13,10 +13,11 @@ export default function Home() {
         <Image
           src="https://placehold.co/1920x1080"
           alt="Hero background"
-          layout="fill"
+          fill
           objectFit="cover"
           className="z-0 scale-110 blur-sm"
           data-ai-hint="dark gold background"
+          priority
         />
         <div className="z-20 relative max-w-4xl p-4 flex flex-col items-center animate-fade-in-up">
           <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
@@ -36,22 +37,26 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-16 md:py-24 bg-background">
+      <section className="py-16 md:py-24 bg-background bg-hero-pattern">
         <div className="container mx-auto px-4">
-          <h2 className="text-center font-headline text-3xl md:text-4xl font-bold text-primary mb-2">
-            Featured Masterpieces
-          </h2>
-          <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-12">
-            A curated selection of our most sought-after pieces, embodying the pinnacle of design and artistry.
-          </p>
-          <FeaturedCarousel products={featuredProducts} />
+          <div className="text-center mb-12 animate-fade-in-up" style={{animationDelay: '200ms'}}>
+            <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary mb-2">
+              Featured Masterpieces
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              A curated selection of our most sought-after pieces, embodying the pinnacle of design and artistry.
+            </p>
+          </div>
+          <div className="animate-fade-in-up" style={{animationDelay: '400ms'}}>
+            <FeaturedCarousel products={featuredProducts} />
+          </div>
         </div>
       </section>
       
       <section className="py-16 md:py-24 bg-card">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="rounded-lg overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500">
+            <div className="rounded-lg overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500 animate-fade-in-up" style={{animationDelay: '200ms'}}>
               <Image 
                 src="https://placehold.co/600x700"
                 alt="Craftsmanship"
@@ -61,7 +66,7 @@ export default function Home() {
                 data-ai-hint="goldsmith working"
               />
             </div>
-            <div>
+            <div className="animate-fade-in-up" style={{animationDelay: '400ms'}}>
               <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">A Legacy of Pure Brilliance</h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 For generations, Al-Wahab Jewellers has been synonymous with trust and quality. We inherit a legacy of master goldsmiths from the heart of Pakistan, blending traditional techniques with contemporary aesthetics. Each piece is not just jewellery; it's a piece of art, a story waiting to be told.
@@ -74,9 +79,9 @@ export default function Home() {
         </div>
       </section>
 
-       <section className="py-16 md:py-24 bg-background">
+       <section className="py-16 md:py-24 bg-background bg-hero-pattern">
         <div className="container mx-auto px-4 text-center">
-           <div className="max-w-3xl mx-auto flex flex-col items-center">
+           <div className="max-w-3xl mx-auto flex flex-col items-center animate-fade-in-up" style={{animationDelay: '200ms'}}>
             <div className="p-4 bg-primary/10 rounded-full mb-4">
                 <Gem className="h-12 w-12 text-primary" />
             </div>
