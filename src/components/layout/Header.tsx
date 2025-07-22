@@ -12,7 +12,6 @@ import { useState } from "react";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/collections", label: "Collections" },
-  { href: "/greeting-generator", label: "Greeting Generator" },
   { href: "/contact", label: "Contact Us" },
 ];
 
@@ -26,7 +25,7 @@ export function Header() {
         <Link href="/" className="mr-6 flex items-center space-x-2">
           <Gem className="h-6 w-6 text-primary" />
           <span className="font-bold font-headline text-2xl text-gold-shimmer">
-            ZarQ
+            Al-Wahab
           </span>
         </Link>
         <div className="flex flex-1 items-center justify-end space-x-2">
@@ -59,7 +58,7 @@ export function Header() {
                 <div className="flex items-center justify-between p-4 border-b">
                    <Link href="/" className="flex items-center space-x-2" onClick={() => setIsSheetOpen(false)}>
                     <Gem className="h-6 w-6 text-primary" />
-                    <span className="font-bold font-headline text-2xl text-gold-shimmer">ZarQ</span>
+                    <span className="font-bold font-headline text-2xl text-gold-shimmer">Al-Wahab</span>
                   </Link>
                   <Button variant="ghost" size="icon" onClick={() => setIsSheetOpen(false)}>
                     <X className="h-5 w-5" />

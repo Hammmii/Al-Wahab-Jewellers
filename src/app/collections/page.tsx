@@ -2,7 +2,7 @@ import { products } from "@/lib/placeholder-data";
 import { ProductCard } from "@/components/products/ProductCard";
 
 export const metadata = {
-  title: "Collections - ZarQ",
+  title: "Collections - Al-Wahab Jewellers",
   description: "Explore our exquisite collections of gold jewellery.",
 };
 

@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
   }
   return {
-    title: `${product.name} - ZarQ`,
+    title: `${product.name} - Al-Wahab Jewellers`,
     description: product.description,
   };
 }

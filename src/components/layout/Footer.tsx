@@ -10,7 +10,7 @@ export function Footer() {
             <Link href="/" className="flex items-center space-x-2 mb-4">
               <Gem className="h-8 w-8 text-primary" />
               <span className="font-bold font-headline text-3xl text-gold-shimmer">
-                ZarQ
+                Al-Wahab
               </span>
             </Link>
             <p className="text-muted-foreground text-center md:text-left text-sm">
@@ -22,7 +22,6 @@ export function Footer() {
             <ul className="space-y-2">
               <li><Link href="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link></li>
               <li><Link href="/collections" className="text-muted-foreground hover:text-primary transition-colors">Collections</Link></li>
-              <li><Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About Us</Link></li>
               <li><Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors">Contact</Link></li>
             </ul>
           </div>
@@ -31,7 +30,7 @@ export function Footer() {
             <ul className="space-y-2 text-muted-foreground">
               <li>123 Gold Street, Lahore, Pakistan</li>
               <li>+92 300 1234567</li>
-              <li>contact@zarq.com</li>
+              <li>contact@alwahabjewellers.com</li>
             </ul>
           </div>
           <div>
@@ -44,7 +43,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 border-t border-border/40 pt-4 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} ZarQ. All Rights Reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Al-Wahab Jewellers. All Rights Reserved.</p>
         </div>
       </div>
     </footer>

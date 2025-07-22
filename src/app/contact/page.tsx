@@ -6,8 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail } from "lucide-react";
 
 export const metadata = {
-  title: "Contact Us - ZarQ",
-  description: "Get in touch with ZarQ for inquiries, appointments, or support.",
+  title: "Contact Us - Al-Wahab Jewellers",
+  description: "Get in touch with Al-Wahab Jewellers for inquiries, appointments, or support.",
 };
 
 export default function ContactPage() {
@@ -76,12 +76,12 @@ export default function ContactPage() {
             </div>
             <div>
               <h3 className="text-xl font-semibold font-headline text-primary">Email</h3>
-              <p className="text-muted-foreground">contact@zarq.com</p>
+              <p className="text-muted-foreground">contact@alwahabjewellers.com</p>
             </div>
           </div>
           <div className="aspect-video w-full rounded-lg overflow-hidden mt-8 border border-border/40">
             {/* Placeholder for a map */}
-            <img src="https://placehold.co/600x400" alt="Map to ZarQ" className="w-full h-full object-cover" data-ai-hint="city map" />
+            <img src="https://placehold.co/600x400" alt="Map to Al-Wahab Jewellers" className="w-full h-full object-cover" data-ai-hint="city map" />
           </div>
         </div>
       </div>

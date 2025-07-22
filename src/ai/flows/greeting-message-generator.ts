@@ -31,7 +31,7 @@ const prompt = ai.definePrompt({
   name: 'greetingMessageGeneratorPrompt',
   input: {schema: GreetingMessageGeneratorInputSchema},
   output: {schema: GreetingMessageGeneratorOutputSchema},
-  prompt: `You are a creative marketing specialist for a Gold Jewellery business in Pakistan named ZarQ.
+  prompt: `You are a creative marketing specialist for a Gold Jewellery business in Pakistan named Al-Wahab Jewellers.
 
 You will generate a personalized greeting message for a special occasion with tailored jewellery suggestions.
 

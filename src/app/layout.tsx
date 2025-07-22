@@ -17,8 +17,8 @@ const fontHeadline = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "ZarQ - Exquisite Gold Jewellery",
-  description: "Discover the finest collection of gold jewellery in Pakistan. ZarQ offers timeless elegance and craftsmanship.",
+  title: "Al-Wahab Jewellers - Exquisite Gold Jewellery",
+  description: "Discover the finest collection of gold jewellery in Pakistan. Al-Wahab Jewellers offers timeless elegance and craftsmanship.",
 };
 
 export default function RootLayout({
