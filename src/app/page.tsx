@@ -44,7 +44,7 @@ export default function Home() {
           priority
         />
         <div className="z-20 relative max-w-4xl p-4 flex flex-col items-center animate-fade-in-up">
-          <h1 className="font-urdu text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight text-gold-shimmer">
+          <h1 className="font-urdu text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight text-gold-shimmer">
             الوہاب جیولرز
           </h1>
           <p className="mt-4 font-headline text-2xl md:text-3xl text-stone-300/90 tracking-wider">Al-Wahab Jewellers</p>

@@ -1,16 +1,18 @@
 
 "use client";
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Draggable from 'react-draggable';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Upload, Scale, Sparkles, Hand, RotateCcw, ZoomIn, ZoomOut, CheckCircle } from 'lucide-react';
+import { Upload, Scale, Sparkles, Hand, RotateCcw, ZoomIn, ZoomOut, CheckCircle, Camera, VideoOff } from 'lucide-react';
 import { products } from '@/lib/placeholder-data';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function VirtualTryOnPage() {
   const [handImage, setHandImage] = useState<string | null>(null);
@@ -18,6 +20,42 @@ export default function VirtualTryOnPage() {
   const [ringState, setRingState] = useState({ scale: 1, rotation: 0 });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState(false);
+  const [useCamera, setUseCamera] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (!useCamera) {
+        if(videoRef.current?.srcObject) {
+            const stream = videoRef.current.srcObject as MediaStream;
+            stream.getTracks().forEach(track => track.stop());
+            videoRef.current.srcObject = null;
+        }
+        return;
+    };
+
+    const getCameraPermission = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        setHasCameraPermission(true);
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (error) {
+        console.error('Error accessing camera:', error);
+        setHasCameraPermission(false);
+        setUseCamera(false);
+        toast({
+          variant: 'destructive',
+          title: 'Camera Access Denied',
+          description: 'Please enable camera permissions in your browser settings to use this app.',
+        });
+      }
+    };
+    getCameraPermission();
+  }, [useCamera, toast]);
+
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -25,6 +63,7 @@ export default function VirtualTryOnPage() {
       reader.onload = (event) => {
         setHandImage(event.target?.result as string);
         setIsSubmitted(false);
+        setUseCamera(false);
       };
       reader.readAsDataURL(e.target.files[0]);
     }
@@ -39,8 +78,10 @@ export default function VirtualTryOnPage() {
 
   const handleSubmitForQuote = () => {
     setIsSubmitted(true);
-    // In a real app, you would handle the submission here,
-    // e.g., by saving the composite image or sending data to a server.
+    toast({
+        title: "Quote Requested!",
+        description: "Our team will contact you shortly with more details.",
+    })
   }
 
   return (
@@ -48,31 +89,41 @@ export default function VirtualTryOnPage() {
       <div className="text-center mb-12">
         <h1 className="font-headline text-4xl md:text-5xl font-bold text-primary">Virtual Try-On</h1>
         <p className="mt-4 max-w-3xl mx-auto text-lg text-muted-foreground">
-          See how our rings look on your hand. Upload a photo and find your perfect piece.
+          See how our rings look on your hand. Upload a photo or use your camera to find your perfect piece.
         </p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
         <div className="md:col-span-2">
           <Card className="border-border/40 w-full h-[600px] flex items-center justify-center relative overflow-hidden bg-card/50">
-            {!handImage && (
-              <div className="text-center text-muted-foreground">
+            
+            {!handImage && !useCamera && (
+              <div className="text-center text-muted-foreground p-8">
                 <Hand className="mx-auto h-24 w-24 mb-4" />
-                <h3 className="text-2xl font-headline mb-2 text-foreground">Upload a photo of your hand</h3>
-                <p>Click the button on the right to get started.</p>
+                <h3 className="text-2xl font-headline mb-2 text-foreground">See it on your hand</h3>
+                <p>Upload a photo or use your camera to get started.</p>
               </div>
             )}
             
-            {handImage && (
+            <video ref={videoRef} className={`w-full h-full object-cover ${useCamera ? 'block' : 'hidden'}`} autoPlay muted playsInline />
+
+            {handImage && !useCamera && (
               <Image src={handImage} alt="User's hand" layout="fill" objectFit="contain" />
             )}
             
-            {handImage && selectedRing && (
+            {(handImage || useCamera) && selectedRing && (
               <Draggable bounds="parent">
                 <div className="absolute cursor-move" style={{ transform: `scale(${ringState.scale}) rotate(${ringState.rotation}deg)` }}>
                   <Image src={selectedRing.images[0]} alt={selectedRing.name} width={100} height={100} data-ai-hint="ring" />
                 </div>
               </Draggable>
+            )}
+
+            {useCamera && !hasCameraPermission && (
+                <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white p-4">
+                    <VideoOff className="w-16 h-16 mb-4" />
+                    <p className="text-lg text-center">Waiting for camera permission...</p>
+                </div>
             )}
           </Card>
         </div>
@@ -84,10 +135,15 @@ export default function VirtualTryOnPage() {
             </CardHeader>
             <CardContent className="space-y-6">
                 <div>
-                  <Label className="mb-2 block">1. Upload Your Photo</Label>
-                  <Button onClick={() => fileInputRef.current?.click()} className="w-full" variant="outline">
-                    <Upload className="mr-2" /> Upload Hand Photo
-                  </Button>
+                  <Label className="mb-2 block">1. Choose Your View</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button onClick={() => fileInputRef.current?.click()} className="w-full" variant="outline">
+                        <Upload className="mr-2" /> Upload Photo
+                    </Button>
+                    <Button onClick={() => { setUseCamera(true); setHandImage(null); }} className="w-full" variant="outline">
+                        <Camera className="mr-2" /> Use Camera
+                    </Button>
+                  </div>
                   <Input 
                     ref={fileInputRef} 
                     type="file" 
@@ -112,16 +168,16 @@ export default function VirtualTryOnPage() {
               <div className="space-y-4">
                  <Label>3. Adjust the Ring</Label>
                  <div className="grid grid-cols-2 gap-2">
-                    <Button variant="outline" onClick={() => setRingState(s => ({...s, scale: s.scale * 1.1}))} disabled={!handImage}>
+                    <Button variant="outline" onClick={() => setRingState(s => ({...s, scale: s.scale * 1.1}))} disabled={!handImage && !useCamera}>
                         <ZoomIn className="mr-2"/> Zoom In
                     </Button>
-                     <Button variant="outline" onClick={() => setRingState(s => ({...s, scale: s.scale * 0.9}))} disabled={!handImage}>
+                     <Button variant="outline" onClick={() => setRingState(s => ({...s, scale: s.scale * 0.9}))} disabled={!handImage && !useCamera}>
                         <ZoomOut className="mr-2"/> Zoom Out
                     </Button>
-                     <Button variant="outline" onClick={() => setRingState(s => ({...s, rotation: s.rotation - 15}))} disabled={!handImage}>
+                     <Button variant="outline" onClick={() => setRingState(s => ({...s, rotation: s.rotation - 15}))} disabled={!handImage && !useCamera}>
                         <RotateCcw className="mr-2"/> Rotate
                     </Button>
-                     <Button variant="outline" onClick={() => setRingState({ scale: 1, rotation: 0})} disabled={!handImage}>
+                     <Button variant="outline" onClick={() => setRingState({ scale: 1, rotation: 0})} disabled={!handImage && !useCamera}>
                         Reset
                     </Button>
                  </div>
@@ -143,7 +199,7 @@ export default function VirtualTryOnPage() {
                 ) : (
                     <>
                     <p className="text-muted-foreground mb-4">Click below to submit your design for a personalized quote from our expert artisans.</p>
-                    <Button onClick={handleSubmitForQuote} className="w-full" size="lg" disabled={!handImage || !selectedRing}>
+                    <Button onClick={handleSubmitForQuote} className="w-full" size="lg" disabled={(!handImage && !useCamera) || !selectedRing}>
                         Submit for a Quote
                     </Button>
                     </>
