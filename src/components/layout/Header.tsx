@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Gem, Menu, Sparkles, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -15,6 +15,17 @@ const navLinks = [
   { href: "/contact", label: "Contact Us" },
 ];
 
+const Logo = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      className="h-8 w-8 text-primary"
+      fill="currentColor"
+    >
+      <path d="M20 80 L30 20 L50 60 L70 20 L80 80 L65 80 L50 35 L35 80 Z" stroke="currentColor" strokeWidth="5" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
+)
+
 export function Header() {
   const pathname = usePathname();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -23,8 +34,8 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         <Link href="/" className="mr-6 flex items-center space-x-2">
-          <Gem className="h-6 w-6 text-primary" />
-          <span className="font-bold font-headline text-2xl text-gold-shimmer">
+          <Logo />
+          <span className="font-bold font-headline text-2xl text-primary">
             Al-Wahab
           </span>
         </Link>
@@ -57,8 +68,8 @@ export function Header() {
               <div className="flex flex-col h-full">
                 <div className="flex items-center justify-between p-4 border-b">
                    <Link href="/" className="flex items-center space-x-2" onClick={() => setIsSheetOpen(false)}>
-                    <Gem className="h-6 w-6 text-primary" />
-                    <span className="font-bold font-headline text-2xl text-gold-shimmer">Al-Wahab</span>
+                    <Logo />
+                    <span className="font-bold font-headline text-2xl text-primary">Al-Wahab</span>
                   </Link>
                   <Button variant="ghost" size="icon" onClick={() => setIsSheetOpen(false)}>
                     <X className="h-5 w-5" />

@@ -20,8 +20,8 @@ export default function Home() {
           priority
         />
         <div className="z-20 relative max-w-4xl p-4 flex flex-col items-center animate-fade-in-up">
-          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
-            <span className="text-gold-shimmer">Al-Wahab Jewellers</span>
+          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-primary">
+            Al-Wahab Jewellers
           </h1>
           <p className="mt-6 max-w-2xl text-lg md:text-xl text-stone-300">
             A Legacy of Purity, A Tradition of Trust. Discover exquisite craftsmanship and breathtaking designs curated for moments that matter.
@@ -83,7 +83,14 @@ export default function Home() {
         <div className="container mx-auto px-4 text-center">
            <div className="max-w-3xl mx-auto flex flex-col items-center animate-fade-in-up" style={{animationDelay: '200ms'}}>
             <div className="p-4 bg-primary/10 rounded-full mb-4">
-                <Gem className="h-12 w-12 text-primary" />
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 100 100"
+                    className="h-12 w-12 text-primary"
+                    fill="currentColor"
+                >
+                    <path d="M20 80 L30 20 L50 60 L70 20 L80 80 L65 80 L50 35 L35 80 Z" stroke="currentColor" strokeWidth="5" strokeLinejoin="round" strokeLinecap="round" />
+                </svg>
             </div>
             <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary mt-4">
               Visit Our Showroom

@@ -1,5 +1,16 @@
 import Link from "next/link";
-import { Gem, Twitter, Instagram, Facebook } from "lucide-react";
+import { Twitter, Instagram, Facebook } from "lucide-react";
+
+const Logo = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      className="h-8 w-8 text-primary"
+      fill="currentColor"
+    >
+      <path d="M20 80 L30 20 L50 60 L70 20 L80 80 L65 80 L50 35 L35 80 Z" stroke="currentColor" strokeWidth="5" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
+)
 
 export function Footer() {
   return (
@@ -8,8 +19,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="flex flex-col items-center md:items-start">
             <Link href="/" className="flex items-center space-x-2 mb-4">
-              <Gem className="h-8 w-8 text-primary" />
-              <span className="font-bold font-headline text-3xl text-gold-shimmer">
+              <Logo />
+              <span className="font-bold font-headline text-3xl text-primary">
                 Al-Wahab
               </span>
             </Link>
