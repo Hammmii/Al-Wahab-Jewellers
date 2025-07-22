@@ -3,25 +3,35 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FeaturedCarousel } from "@/components/products/FeaturedCarousel";
 import { featuredProducts } from "@/lib/placeholder-data";
+import { Diamond } from "lucide-react";
 
 const Logo = () => (
    <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="currentColor"
+      viewBox="0 0 100 100"
       className="h-12 w-12 text-primary"
+      fill="currentColor"
     >
       <path
-        fillRule="evenodd"
-        d="M12.96 6.834a1.5 1.5 0 011.06-1.06l3.341-.955a1.5 1.5 0 011.583 1.583l-.955 3.341a1.5 1.5 0 01-1.06 1.06l-4.25 1.214a1.5 1.5 0 01-1.39-.099l-4.14-2.41a1.5 1.5 0 010-2.598l4.14-2.41a1.5 1.5 0 01.67-.156zm-4.24 7.332l-2.41 4.14a1.5 1.5 0 01-2.598 0l-2.41-4.14a1.5 1.5 0 01.67-2.02l3.342-.954a1.5 1.5 0 011.583 1.583l-.955 3.341a1.5 1.5 0 01-1.06 1.06zM18 12.5a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z"
-        clipRule="evenodd"
+        d="M50,2.5L78.5,21.5L97.5,50L78.5,78.5L50,97.5L21.5,78.5L2.5,50L21.5,21.5L50,2.5Z"
+        stroke="hsl(var(--primary))"
+        strokeWidth="3"
+        fill="transparent"
       />
+      <text x="28" y="62" fontFamily="serif" fontSize="38" fill="hsl(var(--primary))">AW</text>
     </svg>
 )
 
+const BrandLogo = ({ name }: { name: string }) => (
+  <div className="flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300">
+    <p className="text-2xl font-bold font-headline text-muted-foreground">{name}</p>
+  </div>
+);
+
+
 export default function Home() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-hero-pattern">
       <section className="relative h-[70vh] md:h-[90vh] w-full flex items-center justify-center text-center text-white overflow-hidden sparkle-bg">
         <div className="absolute inset-0 bg-black/70 z-10" />
         <Image
@@ -51,7 +61,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-16 md:py-24 bg-background bg-hero-pattern">
+      <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 animate-fade-in-up" style={{animationDelay: '200ms'}}>
             <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary mb-2">
@@ -67,7 +77,7 @@ export default function Home() {
         </div>
       </section>
       
-      <section className="py-16 md:py-24 bg-card">
+      <section className="py-16 md:py-24 bg-card/50">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="rounded-lg overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500 animate-fade-in-up" style={{animationDelay: '200ms'}}>
@@ -93,7 +103,22 @@ export default function Home() {
         </div>
       </section>
 
-       <section className="py-16 md:py-24 bg-background bg-hero-pattern">
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto text-center">
+          <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary mb-4 animate-fade-in-up">As Featured In</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-12 animate-fade-in-up" style={{animationDelay: '200ms'}}>
+            Recognized for our commitment to excellence and design innovation.
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center animate-fade-in-up" style={{animationDelay: '400ms'}}>
+            <BrandLogo name="VOGUE" />
+            <BrandLogo name="Forbes" />
+            <BrandLogo name="HELLO!" />
+            <BrandLogo name="BRIDES" />
+          </div>
+        </div>
+      </section>
+
+       <section className="py-16 md:py-24 bg-card/50">
         <div className="container mx-auto px-4 text-center">
            <div className="max-w-3xl mx-auto flex flex-col items-center animate-fade-in-up" style={{animationDelay: '200ms'}}>
             <div className="p-4 bg-primary/10 rounded-full mb-4">
