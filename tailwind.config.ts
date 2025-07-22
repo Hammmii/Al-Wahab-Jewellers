@@ -19,6 +19,7 @@ export default {
       fontFamily: {
         body: ['var(--font-body)', 'sans-serif'],
         headline: ['var(--font-headline)', 'serif'],
+        urdu: ['var(--font-urdu)', 'serif'],
         code: ['monospace'],
       },
       colors: {

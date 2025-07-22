@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Noto_Nastaliq_Urdu } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Header } from "@/components/layout/Header";
@@ -15,6 +15,12 @@ const fontHeadline = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-headline",
 });
+
+const fontUrdu = Noto_Nastaliq_Urdu({
+  subsets: ["arabic"],
+  variable: "--font-urdu",
+});
+
 
 export const metadata: Metadata = {
   title: "Al-Wahab Jewellers - Exquisite Gold Jewellery",
@@ -32,7 +38,8 @@ export default function RootLayout({
         className={cn(
           "min-h-screen bg-background font-body antialiased",
           fontBody.variable,
-          fontHeadline.variable
+          fontHeadline.variable,
+          fontUrdu.variable
         )}
       >
         <div className="relative flex min-h-screen flex-col">
