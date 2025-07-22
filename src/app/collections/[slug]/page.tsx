@@ -78,7 +78,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
              <p className="text-sm text-muted-foreground">(12 customer reviews)</p>
           </div>
           <Separator />
-          <p className="text-3xl font-bold text-foreground">${product.price.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-foreground">PKR {product.price.toLocaleString()}</p>
           <p className="text-muted-foreground">{product.description}</p>
           <div className="grid gap-2 text-sm">
             <div className="flex justify-between">

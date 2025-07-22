@@ -34,7 +34,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </CardTitle>
       </CardContent>
       <CardFooter className="p-4 flex justify-between items-center">
-        <p className="text-lg font-semibold text-primary">${product.price.toLocaleString()}</p>
+        <p className="text-lg font-semibold text-primary">PKR {product.price.toLocaleString()}</p>
         <Button asChild variant="outline">
           <Link href={`/collections/${product.slug}`}>View</Link>
         </Button>
