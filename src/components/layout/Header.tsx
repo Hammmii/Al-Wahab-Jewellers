@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -12,6 +13,7 @@ import { useState } from "react";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/collections", label: "Collections" },
+  { href: "/custom-design", label: "Create Your Design" },
   { href: "/contact", label: "Contact Us" },
 ];
 
