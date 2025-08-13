@@ -48,6 +48,9 @@ export function Header() {
           <span className="font-bold font-headline text-2xl text-primary">
             Al-Wahab
           </span>
+          <span className="font-urdu text-3xl text-gold-shimmer ml-2" style={{lineHeight: '1.2', overflow: 'visible'}}>
+            الوَہاب جیولرز
+          </span>
         </Link>
         <div className="flex flex-1 items-center justify-end space-x-2">
           <nav className="hidden md:flex gap-6">
@@ -80,6 +83,9 @@ export function Header() {
                    <Link href="/" className="flex items-center space-x-2" onClick={() => setIsSheetOpen(false)}>
                     <Logo />
                     <span className="font-bold font-headline text-2xl text-primary">Al-Wahab</span>
+                    <span className="font-urdu text-3xl text-gold-shimmer ml-2" style={{lineHeight: '1.2', overflow: 'visible'}}>
+                      الوَہاب جیولرز
+                    </span>
                   </Link>
                   <Button variant="ghost" size="icon" onClick={() => setIsSheetOpen(false)}>
                     <X className="h-5 w-5" />

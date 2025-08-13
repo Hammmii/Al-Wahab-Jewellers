@@ -22,7 +22,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 relative z-20 text-center text-white">
           <h1 className="font-headline text-4xl md:text-6xl font-bold text-gold-shimmer">A Legacy Forged in Gold</h1>
           <p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-stone-300">
-            For over three generations, Al-Wahab Jewellers has been a hallmark of purity, artistry, and trust in the heart of Pakistan's cultural capital, Lahore.
+            For over three generations, Al-Wahab Jewellers has been a hallmark of purity, artistry, and trust in the heart of Multan, Pakistan's city of saints.
           </p>
         </div>
       </section>

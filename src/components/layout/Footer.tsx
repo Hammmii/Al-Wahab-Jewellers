@@ -29,6 +29,9 @@ export function Footer() {
               <span className="font-bold font-headline text-3xl text-primary">
                 Al-Wahab
               </span>
+              <span className="font-urdu text-3xl text-gold-shimmer ml-2" style={{lineHeight: '1.2', overflow: 'visible'}}>
+                الوَہاب جیولرز
+              </span>
             </Link>
             <p className="text-muted-foreground text-center md:text-left text-sm">
               Crafting timeless treasures for generations.
@@ -48,8 +51,8 @@ export function Footer() {
           <div>
             <h3 className="font-headline text-lg font-semibold text-primary mb-4">Contact Us</h3>
             <ul className="space-y-2 text-muted-foreground">
-              <li>123 Gold Street, Lahore, Pakistan</li>
-              <li>+92 300 1234567</li>
+              <li>45 Sarafa Bazar, Multan, Pakistan</li>
+              <li>+92 321 6543210</li>
               <li>contact@alwahabjewellers.com</li>
             </ul>
           </div>

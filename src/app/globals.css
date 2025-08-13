@@ -58,11 +58,12 @@
 
 @layer utilities {
   .text-gold-shimmer {
-    background: linear-gradient(110deg, hsl(var(--primary)), hsl(var(--primary) / 0.8), hsl(var(--primary)), hsl(var(--primary)));
+    background: linear-gradient(110deg, #e6c97a 20%, #bfa14a 40%, #fffbe6 60%, #bfa14a 80%, #e6c97a 100%);
     background-size: 200% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: shimmer 5s linear infinite;
+    filter: drop-shadow(0 2px 8px #bfa14a55);
   }
 
   @keyframes shimmer {
@@ -77,6 +78,7 @@
   .bg-hero-pattern {
     position: relative;
     overflow: hidden;
+    background: radial-gradient(ellipse at center, #1a1207 0%, #000 100%);
   }
 
   .bg-hero-pattern::before {
@@ -86,16 +88,52 @@
     left: 0;
     width: 200%;
     height: 200%;
+    pointer-events: none;
     background-image: 
-      radial-gradient(circle at 1px 1px, hsl(var(--primary) / 0.15), transparent 1px),
-      radial-gradient(circle at 10px 10px, hsl(var(--primary) / 0.1), transparent 1px);
-    background-size: 50px 50px;
-    animation: move-pattern 30s linear infinite;
-    opacity: 0.5;
-    transform-origin: 0 0;
+      radial-gradient(circle at 20% 30%, #bfa14a33 1.5px, transparent 1.5px),
+      radial-gradient(circle at 60% 70%, #bfa14a33 1.5px, transparent 1.5px),
+      radial-gradient(circle at 80% 20%, #bfa14a33 1.5px, transparent 1.5px),
+      radial-gradient(circle at 40% 80%, #bfa14a33 1.5px, transparent 1.5px),
+      radial-gradient(circle at 70% 50%, #bfa14a33 1.5px, transparent 1.5px),
+      radial-gradient(circle at 10% 90%, #bfa14a33 1.5px, transparent 1.5px);
+    background-size: 100px 100px;
+    animation: gold-sprinkle 30s linear infinite;
+  }
+   
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+    opacity: 0;
+  }
+   
+  .sparkle-bg {
+    position: relative;
+  }
+   
+  .sparkle-bg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 0L12 8L20 10L12 12L10 20L8 12L0 10L8 8L10 0Z' fill='rgba(255, 215, 0, 0.15)'/%3E%3C/svg%3E");
+    background-size: 40px 40px;
+    pointer-events: none;
+    opacity: 0.18;
+    z-index: 1;
+    animation: sparkle-gold 8s linear infinite;
+  }
+   
+  @keyframes sparkle-gold {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 100px 100px;
+    }
   }
 
-  @keyframes move-pattern {
+  @keyframes gold-sprinkle {
     from {
       transform: translate(0, 0);
     }
@@ -103,7 +141,6 @@
       transform: translate(-50%, -50%);
     }
   }
-
 
   @keyframes fade-in-up {
     from {
@@ -119,32 +156,18 @@
   .animate-fade-in-up {
     animation: fade-in-up 0.8s ease-in-out forwards;
   }
-  
-  .sparkle-bg {
-    position: relative;
-    overflow: hidden;
-  }
 
-  .sparkle-bg::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 200%;
-    height: 200%;
-    background-image: radial-gradient(circle, #fff 1px, transparent 1px);
-    background-size: 25px 25px;
-    animation: sparkle 20s linear infinite;
-    opacity: 0.1;
-    transform-origin: 0 0;
-  }
-
-  @keyframes sparkle {
-    from {
-      transform: translate(0%, 0%);
-    }
-    to {
-      transform: translate(-50%, -50%);
-    }
+  .font-urdu {
+    font-family: var(--font-urdu), 'Noto Nastaliq Urdu', serif;
+    direction: rtl;
+    overflow: visible !important;
+    text-overflow: initial;
+    line-height: 1.2;
+    font-weight: bold;
+    font-size: inherit;
+    letter-spacing: 0;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import ImageWithFallback from "../ImageWithFallback";
 import {
   Carousel,
   CarouselContent,
@@ -33,7 +33,7 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps) {
               <Card className="overflow-hidden group transition-all duration-300 hover:shadow-primary/20 hover:shadow-lg hover:border-primary/50">
                 <CardContent className="flex flex-col items-center justify-center p-0">
                   <div className="relative w-full aspect-square overflow-hidden">
-                    <Image
+                    <ImageWithFallback
                       src={product.images[0]}
                       alt={product.name}
                       fill

@@ -5,6 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Star } from "lucide-react";
+import dynamic from "next/dynamic";
+import EternalFlameRingMedia from "@/components/EternalFlameRingMedia";
+import GoldRateDisplay from "@/components/GoldRateDisplay";
 
 export async function generateStaticParams() {
   return products.map((product) => ({
@@ -13,7 +16,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const product = products.find((p) => p.slug === params.slug);
+  // Use Promise.resolve to ensure params is properly awaited
+  const resolvedParams = await Promise.resolve(params);
+  const product = products.find((p) => p.slug === resolvedParams.slug);
   if (!product) {
     return {
       title: "Product Not Found",
@@ -25,8 +30,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default function ProductDetailPage({ params }: { params: { slug: string } }) {
-  const product = products.find((p) => p.slug === params.slug);
+export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
+  // Use Promise.resolve to ensure params is properly awaited
+  const resolvedParams = await Promise.resolve(params);
+  const product = products.find((p) => p.slug === resolvedParams.slug);
 
   if (!product) {
     notFound();
@@ -37,14 +44,19 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
       <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-start">
         <div className="grid gap-4">
           <div className="aspect-square rounded-lg overflow-hidden border border-border/40">
-            <Image
-              src={product.images[0]}
-              alt={product.name}
-              width={800}
-              height={800}
-              className="w-full h-full object-cover"
-              data-ai-hint="jewellery product"
-            />
+            {/* Show video for Eternal Flame Ring if available, otherwise fallback to image */}
+            {product.slug === 'eternal-flame-ring' ? (
+              <EternalFlameRingMedia poster={product.images[0]} name={product.name} />
+            ) : (
+              <Image
+                src={product.images[0]}
+                alt={product.name}
+                width={800}
+                height={800}
+                className="w-full h-full object-cover"
+                data-ai-hint="jewellery product"
+              />
+            )}
           </div>
           <div className="grid grid-cols-3 gap-4">
             {product.images.slice(1).map((img, index) => (
@@ -80,6 +92,11 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
           <Separator />
           <p className="text-3xl font-bold text-foreground">PKR {product.price.toLocaleString()}</p>
           <p className="text-muted-foreground">{product.description}</p>
+          
+          {/* Gold Rate Display */}
+          <div className="mt-4 p-4 bg-accent/10 rounded-lg">
+            <GoldRateDisplay variant="default" />
+          </div>
           <div className="grid gap-2 text-sm">
             <div className="flex justify-between">
                 <span className="text-muted-foreground">Metal Type:</span>

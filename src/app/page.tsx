@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { FeaturedCarousel } from "@/components/products/FeaturedCarousel";
 import { featuredProducts } from "@/lib/placeholder-data";
 import { Diamond } from "lucide-react";
+import ClientHeroSection from "../components/ClientHeroSection";
+import GoldbarVideo from "../components/GoldbarVideo";
 
 const Logo = () => (
    <svg
@@ -33,35 +35,7 @@ const BrandLogo = ({ name }: { name: string }) => (
 export default function Home() {
   return (
     <div className="flex flex-col bg-hero-pattern">
-      <section className="relative h-[70vh] md:h-[90vh] w-full flex items-center justify-center text-center text-white overflow-hidden sparkle-bg">
-        <div className="absolute inset-0 bg-black/70 z-10" />
-        <Image
-          src="https://storage.googleapis.com/aif-stg-testing-public-file-upload/users/20133658/1721758414451-image.jpeg"
-          alt="Hero background"
-          fill
-          style={{objectFit: "cover"}}
-          className="z-0 scale-110 blur-sm"
-          data-ai-hint="gold necklace"
-          priority
-        />
-        <div className="z-20 relative max-w-5xl p-4 flex flex-col items-center animate-fade-in-up">
-          <h1 className="font-urdu text-7xl md:text-8xl lg:text-9xl font-bold text-gold-shimmer">
-            الوہاب جیولرز
-          </h1>
-          <p className="mt-4 font-headline text-2xl md:text-3xl text-stone-300/90 tracking-wider">Al-Wahab Jewellers</p>
-          <p className="mt-6 max-w-2xl text-lg md:text-xl text-stone-300">
-            A Legacy of Purity, A Tradition of Trust. Discover exquisite craftsmanship and breathtaking designs curated for moments that matter.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold transition-transform transform hover:scale-105">
-              <Link href="/collections">Explore Collections</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10 hover:text-primary font-bold transition-transform transform hover:scale-105">
-              <Link href="/contact">Visit Our Store</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <ClientHeroSection />
 
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
@@ -82,23 +56,16 @@ export default function Home() {
       <section className="py-16 md:py-24 bg-card/50">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="rounded-lg overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500 animate-fade-in-up" style={{animationDelay: '200ms'}}>
-              <Image 
-                src="https://placehold.co/600x700"
-                alt="Craftsmanship"
-                width={600}
-                height={700}
-                className="w-full h-auto"
-                data-ai-hint="goldsmith working"
-              />
+            <div className="rounded-lg overflow-hidden shadow-2xl transform hover:scale-100 transition-transform duration-500 animate-fade-in-up flex items-center justify-center bg-black p-4" style={{aspectRatio: '6/7', minHeight: '400px'}}>
+              <GoldbarVideo />
             </div>
             <div className="animate-fade-in-up" style={{animationDelay: '400ms'}}>
               <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">A Legacy of Pure Brilliance</h2>
               <p className="mt-4 text-lg text-muted-foreground">
-                For generations, Al-Wahab Jewellers has been synonymous with trust and quality. We inherit a legacy of master goldsmiths from the heart of Pakistan, blending traditional techniques with contemporary aesthetics. Each piece is not just jewellery; it's a piece of art, a story waiting to be told.
+                Our story began in the vibrant heart of Multan’s Sarafa Bazar, where my father, at just 17, started his journey by selling gold nose pins. With unwavering dedication, he transformed a humble stall into a name trusted by generations. His hands shaped not just gold, but a legacy of honesty, artistry, and family pride.
               </p>
               <p className="mt-4 text-lg text-muted-foreground">
-                We are committed to providing our clients with gold of the highest purity and gemstones of exceptional quality, ensuring that every creation is a treasure to be cherished forever.
+                Today, Al-Wahab Jewellers stands as a symbol of Pakistani tradition and excellence. We blend the timeless skills of our forefathers with modern design, offering jewellery that celebrates every milestone of your life. Every piece is a promise: pure gold, genuine gemstones, and the spirit of Multan’s golden bazars.
               </p>
             </div>
           </div>
@@ -122,7 +89,7 @@ export default function Home() {
 
        <section className="py-16 md:py-24 bg-card/50">
         <div className="container mx-auto px-4 text-center">
-           <div className="max-w-3xl mx-auto flex flex-col items-center animate-fade-in-up" style={{animationDelay: '200ms'}}>
+           <div className="max-w-3xl mx-auto flex flex-col items-center">
             <div className="p-4 bg-primary/10 rounded-full mb-4">
                 <Logo />
             </div>
