@@ -85,30 +85,24 @@ The production server on port 9002 still needs to be restarted to pick up the ne
 
 ## Known issues / blockers
 
-1. **Supabase `_apply_all.sql` has a forward-reference bug.**
-   - The script references `public.is_admin()` in table/storage policies before the function is defined.
-   - When the user ran it, they got: `ERROR: 42883: function public.is_admin() does not exist`.
-   - **Fix in progress:** add stub `is_admin()` / `is_verified_buyer()` definitions before any policies, then `CREATE OR REPLACE` them with real implementations after tables exist.
+1. **Supabase schema needs to be applied.** The fixed `_apply_all.sql` is ready but has not been run on the live project yet. Until it is applied, `create_order()` does not exist and checkout will fail.
 
-2. **Checkout hardening requires the fixed `_apply_all.sql` to be applied.** Until then, `create_order()` does not exist and orders will fail.
+2. **Gold rates are empty.** The `current_gold_rates` view returns no rows until the admin enters manual rates in `/admin` or the auto-rates job is implemented.
 
-3. **Gold rates are empty.** The `current_gold_rates` view returns no rows until the admin enters manual rates in `/admin` or the auto-rates job is implemented.
-
-4. **No admin user exists yet.** After applying the SQL, create a Supabase Auth user and run:
+3. **No admin user exists yet.** After applying the SQL, create a Supabase Auth user and run:
    ```sql
    update public.profiles set is_admin = true where id = '<user-uuid>';
    ```
 
-5. **Production server not restarted.** The existing `next start` on port 9002 is still running the old build.
+4. **Production server not restarted.** The existing `next start` on port 9002 is still running the old build.
 
 ---
 
 ## Immediate next steps (do these first)
 
-1. Fix `supabase/_apply_all.sql` so `is_admin()` / `is_verified_buyer()` exist before any policies reference them.
-2. Tell the user to re-run the entire contents of `supabase/_apply_all.sql` in the Supabase SQL Editor.
+1. Run the entire contents of `supabase/_apply_all.sql` in the Supabase SQL Editor.
+2. Create a Supabase Auth user and run `update public.profiles set is_admin = true where id = '<user-uuid>';`.
 3. Restart the production server on port 9002.
-4. Create an admin user and set `is_admin = true`.
 
 ---
 
