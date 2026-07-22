@@ -5,11 +5,21 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
+import { IconCertificate, IconRing, IconLocation } from '@/components/icons'
+
+/** Serializable icon key (safe to pass across the server→client boundary). */
+export type AdminIconKey = 'dashboard' | 'products' | 'orders'
+
+const ICONS: Record<AdminIconKey, ComponentType<{ className?: string }>> = {
+  dashboard: IconCertificate,
+  products: IconRing,
+  orders: IconLocation,
+}
 
 interface NavItem {
   href: string
   label: string
-  Icon: ComponentType<{ className?: string }>
+  iconKey: AdminIconKey
 }
 
 export function AdminShell({
@@ -40,7 +50,8 @@ export function AdminShell({
         </Link>
       </div>
       <nav className="flex-1 space-y-1 px-3 py-4">
-        {nav.map(({ href, label, Icon }) => {
+        {nav.map(({ href, label, iconKey }) => {
+          const Icon = ICONS[iconKey]
           const active = pathname === href || pathname.startsWith(href + '/')
           return (
             <Link
@@ -93,7 +104,9 @@ export function AdminShell({
       </div>
       {mobileOpen ? (
         <div className="flex flex-col border-b border-border bg-background px-3 py-2 md:hidden">
-          {nav.map(({ href, label, Icon }) => (
+          {nav.map(({ href, label, iconKey }) => {
+            const Icon = ICONS[iconKey]
+            return (
             <Link
               key={href}
               href={href}
@@ -102,7 +115,8 @@ export function AdminShell({
             >
               <Icon className="h-5 w-5" /> {label}
             </Link>
-          ))}
+            )
+          })}
           <button
             type="button"
             onClick={signOut}

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { getAdminUser } from '@/lib/auth/admin'
 import { isSupabaseConfigured } from '@/lib/supabase/configured'
 import { AdminShell } from '@/components/admin/shell'
-import { IconCertificate, IconRing, IconLocation } from '@/components/icons'
+import { IconCertificate } from '@/components/icons'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   // When Supabase isn't configured yet, show a friendly "not available" state
@@ -33,8 +33,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   const user = await getAdminUser()
 
-  // Not signed in → let the login page render (don't redirect here so /admin/login
-  // renders normally; middleware also guards this).
+  // Not signed in → let the login page render.
   if (!user) {
     return <>{children}</>
   }
@@ -53,10 +52,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     )
   }
 
+  // Serializable icon KEYS (not components) — resolved inside the client Shell.
   const nav = [
-    { href: '/admin', label: 'Dashboard', Icon: IconCertificate },
-    { href: '/admin/products', label: 'Products', Icon: IconRing },
-    { href: '/admin/orders', label: 'Orders', Icon: IconLocation },
+    { href: '/admin', label: 'Dashboard', iconKey: 'dashboard' as const },
+    { href: '/admin/products', label: 'Products', iconKey: 'products' as const },
+    { href: '/admin/orders', label: 'Orders', iconKey: 'orders' as const },
   ]
 
   return <AdminShell nav={nav} email={user.email}>{children}</AdminShell>
