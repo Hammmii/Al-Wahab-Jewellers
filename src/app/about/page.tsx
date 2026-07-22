@@ -1,97 +1,101 @@
-import Image from "next/image";
-import { Gem, Target, Eye } from "lucide-react";
+import type { Metadata } from 'next'
+import { Container, Section, SectionHeading } from '@/components/common'
+import { Reveal } from '@/components/motion/reveal'
+import { IconCertificate, IconPurity, IconLocation, IconGift } from '@/components/icons'
 
-export const metadata = {
-  title: "About Us - Al-Wahab Jewellers",
-  description: "Learn about the legacy, mission, and vision of Al-Wahab Jewellers, a name synonymous with trust and craftsmanship in gold jewellery.",
-};
+export const metadata: Metadata = {
+  title: 'About — Al-Wahab Jewellers',
+  description:
+    'A family-run gold atelier in Multan’s Sarafa Bazar. Genuine gold, hand-finished jewellery, and honest craftsmanship.',
+}
+
+const VALUES = [
+  {
+    Icon: IconPurity,
+    title: 'Honest Metal',
+    body: 'Every piece is genuine gold, weighed and purity-stamped to standard — never plated, never short.',
+  },
+  {
+    Icon: IconCertificate,
+    title: 'Authenticated',
+    body: 'Each purchase comes with a certificate of authenticity, so you know exactly what you’re buying.',
+  },
+  {
+    Icon: IconGift,
+    title: 'Made by Hand',
+    body: 'We finish every piece by hand in our workshop, blending traditional craft with considered design.',
+  },
+  {
+    Icon: IconLocation,
+    title: 'Rooted in Multan',
+    body: 'We’re proudly based in Sarafa Bazar (Shop #2), the historic heart of the city’s gold trade.',
+  },
+]
 
 export default function AboutPage() {
   return (
-    <div className="bg-background">
-      <section className="relative py-24 md:py-32 bg-card sparkle-bg">
-        <div className="absolute inset-0 bg-black/60 z-10" />
-        <Image
-          src="https://placehold.co/1920x800"
-          alt="Al-Wahab Jewellers workshop"
-          fill
-          style={{objectFit: "cover"}}
-          className="z-0"
-          data-ai-hint="goldsmith workshop"
-        />
-        <div className="container mx-auto px-4 relative z-20 text-center text-white">
-          <h1 className="font-headline text-4xl md:text-6xl font-bold text-gold-shimmer">A Legacy Forged in Gold</h1>
-          <p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-stone-300">
-            For over three generations, Al-Wahab Jewellers has been a hallmark of purity, artistry, and trust in the heart of Multan, Pakistan's city of saints.
+    <>
+      {/* Hero */}
+      <Section className="bg-hero-pattern text-center">
+        <Reveal>
+          <span className="text-xs font-medium uppercase tracking-luxury text-primary/80">
+            Our Story
+          </span>
+          <h1 className="mt-3 font-headline text-4xl text-foreground md:text-6xl">
+            A Family of Goldsmiths
+          </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">
+            Al-Wahab Jewellers is a family-run atelier in Multan&rsquo;s Sarafa Bazar — where
+            Pakistan&rsquo;s goldsmithing tradition has been passed down for generations.
           </p>
-        </div>
-      </section>
+        </Reveal>
+      </Section>
 
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="animate-fade-in-up" style={{animationDelay: '0ms'}}>
-              <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">Our Story: The Goldsmith's Heritage</h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                Founded by the visionary artisan, Sheikh Abdul Wahab, our journey began in the bustling lanes of old Lahore. With a passion for perfection and an unwavering commitment to quality, he laid the foundation for a legacy that would be cherished for generations.
+      {/* Story */}
+      <Section>
+        <div className="grid gap-10 md:grid-cols-2 md:items-center">
+          <Reveal>
+            <SectionHeading align="left" eyebrow="What we do" title="Gold, honestly made" />
+            <div className="mt-6 space-y-4 leading-relaxed text-muted-foreground">
+              <p>
+                We work only in genuine gold — weighing and hallmarking every piece to standard,
+                and finishing each one by hand. The result is jewellery meant to be worn, loved,
+                and inherited.
               </p>
-              <p className="mt-4 text-lg text-muted-foreground">
-                Today, we carry forward that torch of excellence. We blend time-honored, traditional techniques passed down through our family with contemporary designs to create jewellery that is not just an accessory, but a work of art. Each piece from Al-Wahab Jewellers is a testament to our rich heritage and a promise of everlasting beauty.
+              <p>
+                From bridal sets to everyday bands to bespoke commissions, our promise stays the
+                same: honest metal, honest weight, and workmanship that lasts.
               </p>
             </div>
-             <div className="rounded-lg overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500 animate-fade-in-up" style={{animationDelay: '200ms'}}>
-              <Image 
-                src="https://placehold.co/600x700"
-                alt="Founder of Al-Wahab Jewellers"
-                width={600}
-                height={700}
-                className="w-full h-auto"
-                data-ai-hint="portrait wise old man"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+          </Reveal>
 
-      <section className="py-16 md:py-24 bg-card">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">Our Philosophy</h2>
-            <p className="mt-2 text-muted-foreground max-w-2xl mx-auto">
-              Our principles are as pure as the gold we craft.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div className="p-8 border border-border/40 rounded-lg animate-fade-in-up" style={{animationDelay: '200ms'}}>
-              <div className="p-4 bg-primary/10 rounded-full inline-block mb-4">
-                <Gem className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-headline text-2xl font-semibold text-primary">Our Mission</h3>
-              <p className="mt-2 text-muted-foreground">
-                To craft exquisite jewellery that becomes a part of our customers' most cherished moments, upholding the highest standards of purity, design, and customer service.
-              </p>
+          <Reveal delay={0.1}>
+            <div className="surface-card rounded-2xl p-8 md:p-10">
+              <span className="font-urdu text-4xl text-gold-shimmer">الوَہاب جیولرز</span>
+              <p className="mt-4 font-headline text-2xl text-foreground">Al-Wahab Jewellers</p>
+              <p className="mt-1 text-muted-foreground">Sarafa Bazar, Shop #2, Multan</p>
             </div>
-            <div className="p-8 border border-border/40 rounded-lg animate-fade-in-up" style={{animationDelay: '400ms'}}>
-              <div className="p-4 bg-primary/10 rounded-full inline-block mb-4">
-                <Eye className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-headline text-2xl font-semibold text-primary">Our Vision</h3>
-              <p className="mt-2 text-muted-foreground">
-                To be Pakistan's most trusted and sought-after name in gold jewellery, celebrated for our innovative designs, traditional craftsmanship, and unwavering integrity.
-              </p>
-            </div>
-            <div className="p-8 border border-border/40 rounded-lg animate-fade-in-up" style={{animationDelay: '600ms'}}>
-              <div className="p-4 bg-primary/10 rounded-full inline-block mb-4">
-                <Target className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-headline text-2xl font-semibold text-primary">Our Promise</h3>
-              <p className="mt-2 text-muted-foreground">
-                We guarantee the purity of our gold and the authenticity of our gemstones. Every piece is a commitment to quality that you can trust for a lifetime.
-              </p>
-            </div>
-          </div>
+          </Reveal>
         </div>
-      </section>
-    </div>
-  );
+      </Section>
+
+      {/* Values */}
+      <Section className="bg-card/30">
+        <SectionHeading eyebrow="What we stand for" title="Our Promise" />
+        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {VALUES.map(({ Icon, title, body }, i) => (
+            <Reveal key={title} delay={i * 0.05}>
+              <div className="surface-card flex h-full flex-col gap-4 rounded-xl p-6">
+                <span className="text-primary">
+                  <Icon className="h-8 w-8" />
+                </span>
+                <h3 className="font-headline text-lg text-foreground">{title}</h3>
+                <p className="text-sm leading-relaxed text-muted-foreground">{body}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+    </>
+  )
 }

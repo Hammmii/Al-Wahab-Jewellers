@@ -1,111 +1,80 @@
-import { notFound } from "next/navigation";
-import Image from "next/image";
-import { products } from "@/lib/placeholder-data";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Star } from "lucide-react";
-import dynamic from "next/dynamic";
-import EternalFlameRingMedia from "@/components/EternalFlameRingMedia";
-import GoldRateDisplay from "@/components/GoldRateDisplay";
+import Link from 'next/link'
+import type { Metadata } from 'next'
+import { Button } from '@/components/ui/button'
+import { Container, EmptyState, Section } from '@/components/common'
+import { ProductDetail } from '@/components/products/product-detail'
+import { ProductJsonLd } from '@/components/seo/json-ld'
+import { getProductBySlug } from '@/lib/data/products'
+import { publicImageUrl } from '@/lib/storage'
+import { fromPrice } from '@/lib/domain'
+import { siteConfig } from '@/lib/site'
+import { IconRing } from '@/components/icons'
 
-export async function generateStaticParams() {
-  return products.map((product) => ({
-    slug: product.slug,
-  }));
-}
-
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  // Use Promise.resolve to ensure params is properly awaited
-  const resolvedParams = await Promise.resolve(params);
-  const product = products.find((p) => p.slug === resolvedParams.slug);
-  if (!product) {
-    return {
-      title: "Product Not Found",
-    };
-  }
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const product = await getProductBySlug(slug)
+  if (!product) return { title: 'Not found' }
   return {
-    title: `${product.name} - Al-Wahab Jewellers`,
-    description: product.description,
-  };
+    title: product.name,
+    description: product.description ?? siteConfig.description,
+    openGraph: {
+      title: product.name,
+      description: product.description ?? undefined,
+      url: `${siteConfig.url}/collections/${product.slug}`,
+    },
+  }
 }
 
-export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
-  // Use Promise.resolve to ensure params is properly awaited
-  const resolvedParams = await Promise.resolve(params);
-  const product = products.find((p) => p.slug === resolvedParams.slug);
+export default async function ProductDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const product = await getProductBySlug(slug)
 
   if (!product) {
-    notFound();
+    return (
+      <Section>
+        <Container>
+          <EmptyState
+            icon={<IconRing className="h-10 w-10" />}
+            title="Piece not found"
+            description="This piece isn't available. It may have moved or sold."
+            action={
+              <Button asChild>
+                <Link href="/collections">Back to Collection</Link>
+              </Button>
+            }
+          />
+        </Container>
+      </Section>
+    )
   }
+
+  const price = fromPrice(product)
 
   return (
-    <div className="container mx-auto px-4 py-8 md:py-16">
-      <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-start">
-        <div className="grid gap-4">
-          <div className="aspect-square rounded-lg overflow-hidden border border-border/40">
-            {/* Show video for Eternal Flame Ring if available, otherwise fallback to image */}
-            {product.slug === 'eternal-flame-ring' ? (
-              <EternalFlameRingMedia poster={product.images[0]} name={product.name} />
-            ) : (
-              <Image
-                src={product.images[0]}
-                alt={product.name}
-                width={800}
-                height={800}
-                className="w-full h-full object-cover"
-                data-ai-hint="jewellery product"
-              />
-            )}
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            {product.images.slice(1).map((img, index) => (
-              <div key={index} className="aspect-square rounded-lg overflow-hidden border border-border/40">
-                <Image
-                  src={img}
-                  alt={`${product.name} view ${index + 2}`}
-                  width={200}
-                  height={200}
-                  className="w-full h-full object-cover"
-                  data-ai-hint="product detail"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-4">
-          <div>
-            <Badge variant="secondary" className="mb-2 bg-accent/20 text-accent">{product.category}</Badge>
-            <h1 className="font-headline text-3xl md:text-4xl font-bold text-primary">{product.name}</h1>
-          </div>
-          <div className="flex items-center gap-4">
-             <div className="flex items-center gap-0.5 text-primary">
-                <Star className="w-5 h-5 fill-current" />
-                <Star className="w-5 h-5 fill-current" />
-                <Star className="w-5 h-5 fill-current" />
-                <Star className="w-5 h-5 fill-current" />
-                <Star className="w-5 h-5" />
-             </div>
-             <p className="text-sm text-muted-foreground">(12 customer reviews)</p>
-          </div>
-          <Separator />
-          <p className="text-3xl font-bold text-foreground">PKR {product.price.toLocaleString()}</p>
-          <p className="text-muted-foreground">{product.description}</p>
-          
-          {/* Gold Rate Display */}
-          <div className="mt-4 p-4 bg-accent/10 rounded-lg">
-            <GoldRateDisplay variant="default" />
-          </div>
-          <div className="grid gap-2 text-sm">
-            <div className="flex justify-between">
-                <span className="text-muted-foreground">Metal Type:</span>
-                <span className="font-medium">{product.metalType}</span>
-            </div>
-          </div>
-          <Button size="lg" className="w-full mt-4 bg-primary hover:bg-primary/90 text-primary-foreground font-bold">Inquire Now</Button>
-        </div>
-      </div>
-    </div>
-  );
+    <Section>
+      <ProductJsonLd
+        name={product.name}
+        description={product.description}
+        slug={product.slug}
+        price={price}
+        imageUrls={product.images.map((i) => publicImageUrl(i.storagePath)).filter(Boolean)}
+      />
+      <Container>
+        <nav className="mb-6 text-sm text-muted-foreground">
+          <Link href="/collections" className="hover:text-primary">Collection</Link>
+          <span className="mx-2">/</span>
+          <span className="text-foreground">{product.name}</span>
+        </nav>
+        <ProductDetail product={product} />
+      </Container>
+    </Section>
+  )
 }

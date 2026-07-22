@@ -2,48 +2,101 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ════════════════════════════════════════════════════════════════════════
+   Al-Wahab Jewellers — design tokens
+   Luxury dark + gold. HSL channels (shadcn convention), consumed by
+   tailwind.config.ts as hsl(var(--token)).
+   ════════════════════════════════════════════════════════════════════════ */
 @layer base {
   :root {
-    --background: 8 20% 5%; /* Even darker */
+    /* surfaces */
+    --background: 8 20% 5%;
     --foreground: 0 0% 98%;
-    --card: 15 15% 8%;
+    --card: 16 16% 7%;
     --card-foreground: 0 0% 98%;
-    --popover: 8 20% 5%;
+    --popover: 10 20% 5%;
     --popover-foreground: 0 0% 98%;
-    --primary: 40 95% 40%; /* Darker, richer gold */
-    --primary-foreground: 45 93% 10%;
-    --secondary: 20 10% 15%;
+
+    /* brand — rich gold */
+    --primary: 40 55% 45%;
+    --primary-foreground: 44 60% 8%;
+    --secondary: 24 12% 13%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 20 10% 15%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 40 95% 40%;
-    --accent-foreground: 45 93% 10%;
-    --destructive: 0 62.8% 30.6%;
+    --muted: 22 10% 13%;
+    --muted-foreground: 38 12% 65%;
+    --accent: 40 55% 45%;
+    --accent-foreground: 44 60% 8%;
+
+    /* feedback */
+    --destructive: 0 62% 32%;
     --destructive-foreground: 0 0% 98%;
-    --border: 20 10% 12%; /* Slightly adjusted border */
-    --input: 20 10% 12%;
-    --ring: 40 95% 45%;
-    --radius: 0.5rem;
+    --success: 142 40% 38%;
+
+    /* lines / focus */
+    --border: 30 14% 14%;
+    --input: 30 14% 16%;
+    --ring: 40 55% 48%;
+
+    /* radii */
+    --radius: 0.625rem;
+
+    /* icon system (routed through tokens, never hardcoded) */
+    --icon-stroke: 38 18% 86%;
+    --icon-accent: 43 80% 58%;
+    --icon-stroke-hover: 43 88% 64%;
+
+    /* charts */
+    --chart-1: 41 80% 55%;
+    --chart-2: 32 55% 50%;
+    --chart-3: 16 50% 56%;
+    --chart-4: 160 28% 45%;
+    --chart-5: 205 38% 55%;
+
+    /* admin sidebar */
+    --sidebar-background: 12 16% 6%;
+    --sidebar-foreground: 36 10% 88%;
+    --sidebar-primary: 40 55% 48%;
+    --sidebar-primary-foreground: 44 60% 8%;
+    --sidebar-accent: 24 12% 12%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 30 12% 14%;
+    --sidebar-ring: 40 55% 48%;
   }
- 
+
+  /* App is dark-only; .dark mirrors :root so shadcn dark-mode logic resolves. */
   .dark {
     --background: 8 20% 5%;
     --foreground: 0 0% 98%;
-    --card: 15 15% 8%;
+    --card: 16 16% 7%;
     --card-foreground: 0 0% 98%;
-    --primary: 40 95% 40%;
-    --primary-foreground: 45 93% 10%;
-    --secondary: 20 10% 15%;
+    --popover: 10 20% 5%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 40 55% 45%;
+    --primary-foreground: 44 60% 8%;
+    --secondary: 24 12% 13%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 20 10% 15%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 40 95% 40%;
-    --accent-foreground: 45 93% 10%;
-    --destructive: 0 62.8% 30.6%;
+    --muted: 22 10% 13%;
+    --muted-foreground: 38 12% 65%;
+    --accent: 40 55% 45%;
+    --accent-foreground: 44 60% 8%;
+    --destructive: 0 62% 32%;
     --destructive-foreground: 0 0% 98%;
-    --border: 20 10% 12%;
-    --input: 20 10% 12%;
-    --ring: 40 95% 45%;
+    --border: 30 14% 14%;
+    --input: 30 14% 16%;
+    --ring: 40 55% 48%;
+    --chart-1: 41 80% 55%;
+    --chart-2: 32 55% 50%;
+    --chart-3: 16 50% 56%;
+    --chart-4: 160 28% 45%;
+    --chart-5: 205 38% 55%;
+    --sidebar-background: 12 16% 6%;
+    --sidebar-foreground: 36 10% 88%;
+    --sidebar-primary: 40 55% 48%;
+    --sidebar-primary-foreground: 44 60% 8%;
+    --sidebar-accent: 24 12% 12%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 30 12% 14%;
+    --sidebar-ring: 40 55% 48%;
   }
 }
 
@@ -51,36 +104,104 @@
   * {
     @apply border-border;
   }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern', 'liga', 'calt';
+  }
+
+  /* Gold-tinted text selection */
+  ::selection {
+    background: hsl(var(--primary) / 0.28);
+    color: hsl(var(--foreground));
+  }
+
+  /* Subtle, premium scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(38 25% 20%);
+    border-radius: 9999px;
+    border: 2px solid hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(40 35% 28%);
+  }
+
+  /* Respect reduced-motion globally */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Urdu (RTL) mode — readable Naskh for body/UI text, Nastaliq (Gulzar)
+     only for large headings. Naskh is far more legible at small sizes on
+     mobile than Nastaliq, which matters for our audience. */
+  html.lang-ur body {
+    font-family: var(--font-urdu-body), 'Noto Naskh Arabic', serif;
+    font-size: 17px;
+    line-height: 1.8;
+  }
+  /* Large headings get the elegant Nastaliq (Gulzar) — padded both sides. */
+  html.lang-ur h1,
+  html.lang-ur h2 {
+    font-family: var(--font-urdu-display), 'Gulzar', serif !important;
+    line-height: 2.2;
+    padding-top: 0.35em;
+    padding-bottom: 0.45em;
+    overflow: visible;
+  }
+  /* Smaller headings + labels stay on readable Naskh */
+  html.lang-ur h3,
+  html.lang-ur h4,
+  html.lang-ur label,
+  html.lang-ur .text-xs,
+  html.lang-ur .text-sm {
+    font-family: var(--font-urdu-body), 'Noto Naskh Arabic', serif;
   }
 }
 
+/* ════════════════════════════════════════════════════════════════════════
+   Premium utilities
+   ════════════════════════════════════════════════════════════════════════ */
 @layer utilities {
+  /* Animated gold shimmer text (brand wordmark / hero) */
   .text-gold-shimmer {
     background: linear-gradient(110deg, #e6c97a 20%, #bfa14a 40%, #fffbe6 60%, #bfa14a 80%, #e6c97a 100%);
     background-size: 200% 100%;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+    color: transparent;
     animation: shimmer 5s linear infinite;
-    filter: drop-shadow(0 2px 8px #bfa14a55);
+    filter: drop-shadow(0 2px 10px rgba(191, 161, 74, 0.35));
   }
 
   @keyframes shimmer {
-    0% {
-      background-position: 200% 0;
-    }
-    100% {
-      background-position: -200% 0;
-    }
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
   }
 
+  /* Radial gold vignette + drifting gold-dust particles (hero) */
   .bg-hero-pattern {
     position: relative;
     overflow: hidden;
-    background: radial-gradient(ellipse at center, #1a1207 0%, #000 100%);
+    background: radial-gradient(ellipse at center, #1a1207 0%, #050402 100%);
   }
-
   .bg-hero-pattern::before {
     content: '';
     position: absolute;
@@ -89,85 +210,156 @@
     width: 200%;
     height: 200%;
     pointer-events: none;
-    background-image: 
-      radial-gradient(circle at 20% 30%, #bfa14a33 1.5px, transparent 1.5px),
-      radial-gradient(circle at 60% 70%, #bfa14a33 1.5px, transparent 1.5px),
-      radial-gradient(circle at 80% 20%, #bfa14a33 1.5px, transparent 1.5px),
-      radial-gradient(circle at 40% 80%, #bfa14a33 1.5px, transparent 1.5px),
-      radial-gradient(circle at 70% 50%, #bfa14a33 1.5px, transparent 1.5px),
-      radial-gradient(circle at 10% 90%, #bfa14a33 1.5px, transparent 1.5px);
-    background-size: 100px 100px;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(191, 161, 74, 0.2) 1.5px, transparent 1.5px),
+      radial-gradient(circle at 60% 70%, rgba(191, 161, 74, 0.2) 1.5px, transparent 1.5px),
+      radial-gradient(circle at 80% 20%, rgba(191, 161, 74, 0.2) 1.5px, transparent 1.5px),
+      radial-gradient(circle at 40% 80%, rgba(191, 161, 74, 0.2) 1.5px, transparent 1.5px),
+      radial-gradient(circle at 70% 50%, rgba(191, 161, 74, 0.2) 1.5px, transparent 1.5px),
+      radial-gradient(circle at 10% 90%, rgba(191, 161, 74, 0.2) 1.5px, transparent 1.5px);
+    background-size: 120px 120px;
     animation: gold-sprinkle 30s linear infinite;
   }
-   
-  .animate-fade-in-up {
-    animation: fade-in-up 0.8s ease-out forwards;
-    opacity: 0;
-  }
-   
+
+  /* Faint star sparkle overlay */
   .sparkle-bg {
     position: relative;
   }
-   
   .sparkle-bg::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 0L12 8L20 10L12 12L10 20L8 12L0 10L8 8L10 0Z' fill='rgba(255, 215, 0, 0.15)'/%3E%3C/svg%3E");
     background-size: 40px 40px;
     pointer-events: none;
-    opacity: 0.18;
+    opacity: 0.16;
     z-index: 1;
     animation: sparkle-gold 8s linear infinite;
   }
-   
+
   @keyframes sparkle-gold {
-    0% {
-      background-position: 0 0;
-    }
-    100% {
-      background-position: 100px 100px;
-    }
+    0% { background-position: 0 0; }
+    100% { background-position: 100px 100px; }
   }
 
   @keyframes gold-sprinkle {
-    from {
-      transform: translate(0, 0);
-    }
-    to {
-      transform: translate(-50%, -50%);
-    }
-  }
-
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { transform: translate(0, 0); }
+    to { transform: translate(-50%, -50%); }
   }
 
   .animate-fade-in-up {
-    animation: fade-in-up 0.8s ease-in-out forwards;
+    animation: fade-in-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
+  /* Urdu brand wordmark — Gulzar (screen-optimized Nastaliq).
+     Nastaliq has very tall ascenders AND deep descenders, so we pad both
+     top and bottom generously and force overflow visible so it never clips
+     at any size or inside animated containers. */
   .font-urdu {
-    font-family: var(--font-urdu), 'Noto Nastaliq Urdu', serif;
+    font-family: var(--font-urdu-display), 'Gulzar', serif;
     direction: rtl;
     overflow: visible !important;
-    text-overflow: initial;
-    line-height: 1.2;
-    font-weight: bold;
-    font-size: inherit;
+    line-height: 2.4;
+    padding-top: 0.45em;
+    padding-bottom: 0.55em;
+    margin-top: 0.1em;
+    margin-bottom: 0.15em;
+    font-weight: 400;
     letter-spacing: 0;
     word-break: keep-all;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Premium surface helpers */
+  .surface-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Thin gold divider */
+  .gold-rule {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.6), transparent);
+  }
+
+  /* ── Icon system — colors route through tokens via currentColor ─────── */
+  .icon {
+    color: hsl(var(--icon-stroke));
+    transition: color 0.2s ease;
+  }
+  .icon-accent {
+    color: hsl(var(--icon-accent));
+  }
+  .icon:hover {
+    color: hsl(var(--icon-stroke-hover));
+  }
+  .group:hover .icon {
+    color: hsl(var(--icon-stroke-hover));
+  }
+
+  /* ── Premium motion utilities ─────────────────────────────────────── */
+
+  /* Link underline grow (nav / footer links) */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-underline:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* Gold sweep — diagonal light passes across on hover */
+  .gold-sweep {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .gold-sweep::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 30%, hsl(var(--primary) / 0.18) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: -1;
+  }
+  .gold-sweep:hover::after {
+    transform: translateX(120%);
+  }
+
+  /* Soft lift for cards */
+  .lift {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease, border-color 0.5s ease;
+  }
+  .lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.7);
+  }
+
+  /* Gold edge that lights up on hover */
+  .edge-glow {
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .edge-glow:hover {
+    border-color: hsl(var(--primary) / 0.55);
+    box-shadow: 0 0 24px -6px hsl(var(--primary) / 0.35);
   }
 }

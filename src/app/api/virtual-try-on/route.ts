@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { saveVirtualTryOnSubmission } from '@/lib/submissions';
 
 // Define validation schema for virtual try-on quote request
 const virtualTryOnSchema = z.object({
@@ -14,10 +15,10 @@ export async function POST(request: NextRequest) {
   try {
     // Parse request body
     const body = await request.json();
-    
+
     // Validate request data
     const result = virtualTryOnSchema.safeParse(body);
-    
+
     if (!result.success) {
       // Return validation errors
       return NextResponse.json(
@@ -25,19 +26,20 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    
-    // In a real application, you would save the image and request data
-    // For now, we'll simulate a successful submission
-    
-    // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
+    // Save to database (note: imageData may be large, consider using Firebase Storage for images)
+    const { imageData, ...dataToSave } = result.data;
+    const quoteId = await saveVirtualTryOnSubmission(dataToSave);
+
+    // TODO: Send email notification if email service is configured
+    // This is where you would integrate with Resend, SendGrid, etc.
+
     // Return success response
     return NextResponse.json(
-      { 
-        success: true, 
+      {
+        success: true,
         message: 'Your virtual try-on quote request has been submitted successfully',
-        quoteId: `VTO-${Date.now()}`, // Generate a unique quote ID
+        quoteId: quoteId || `VTO-${Date.now()}`,
         estimatedResponse: '24 hours'
       },
       { status: 201 }

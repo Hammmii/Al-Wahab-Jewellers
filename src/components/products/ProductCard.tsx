@@ -1,45 +1,111 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import type { Product } from '@/lib/types';
+'use client'
 
-interface ProductCardProps {
-  product: Product;
-}
+import Image from 'next/image'
+import Link from 'next/link'
+import { useState } from 'react'
+import { cn } from '@/lib/utils'
+import type { Product } from '@/lib/domain'
+import { fromPrice, primaryImage } from '@/lib/domain'
+import { publicImageUrl } from '@/lib/storage'
+import { useCart, useWishlist } from '@/lib/stores/cart-wishlist-stores'
+import { KaratBadge, Price } from '@/components/common'
+import { IconCart, IconHeart } from '@/components/icons'
+import { useT } from '@/lib/i18n/language-context'
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, className }: { product: Product; className?: string }) {
+  const addItem = useCart((s) => s.addItem)
+  const toggleWishlist = useWishlist((s) => s.toggle)
+  const [wished, setWished] = useState(useWishlist.getState().has(product.id))
+  const t = useT()
+
+  const image = primaryImage(product)
+  const price = fromPrice(product)
+  const src = image ? publicImageUrl(image.storagePath) : ''
+  const firstVariant = product.variants[0]
+
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setWished((v) => !v)
+    toggleWishlist(product.id)
+  }
+
+  const handleAdd = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!firstVariant) return
+    addItem({
+      productId: product.id,
+      slug: product.slug,
+      name: product.name,
+      variantId: firstVariant.id,
+      price: firstVariant.price,
+      image: src,
+      metalPurity: firstVariant.metalPurity,
+      size: firstVariant.size ?? undefined,
+    })
+  }
+
   return (
-    <Card className="w-full max-w-sm rounded-lg overflow-hidden group border-border/40 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
-      <CardHeader className="p-0">
-        <div className="aspect-square overflow-hidden relative">
-          <Link href={`/collections/${product.slug}`}>
-            <Image
-              src={product.images[0]}
-              alt={product.name}
-              fill
-              style={{objectFit: 'cover'}}
-              className="w-full h-full transition-transform duration-500 ease-in-out group-hover:scale-110"
-              data-ai-hint="jewellery product"
-            />
-          </Link>
+    <Link
+      href={`/collections/${product.slug}`}
+      className={cn(
+        'group surface-card lift edge-glow relative flex flex-col overflow-hidden rounded-xl',
+        className,
+      )}
+    >
+      <div className="relative aspect-[4/5] overflow-hidden bg-card">
+        {src ? (
+          <Image
+            src={src}
+            alt={image?.altText ?? product.name}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : null}
+
+        <button
+          type="button"
+          onClick={handleWishlist}
+          aria-label={wished ? 'Remove from wishlist' : 'Save to wishlist'}
+          aria-pressed={wished}
+          className={cn(
+            'absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border backdrop-blur transition-colors',
+            wished
+              ? 'border-primary bg-primary/20 text-primary'
+              : 'border-border/60 bg-background/60 text-muted-foreground hover:text-primary',
+          )}
+        >
+          <IconHeart className="h-5 w-5" />
+        </button>
+      </div>
+
+      <div className="flex flex-1 flex-col gap-2 p-4">
+        <h3 className="font-headline text-lg leading-snug text-foreground">{product.name}</h3>
+        {product.metalType ? (
+          <span className="text-xs text-muted-foreground">{product.metalType}</span>
+        ) : null}
+        {firstVariant ? <KaratBadge purity={firstVariant.metalPurity} /> : null}
+
+        <div className="mt-auto flex items-center justify-between pt-3">
+          {price != null ? (
+            <Price amount={price} from={product.variants.length > 1} />
+          ) : (
+            <span className="text-sm text-muted-foreground">{t('product.enquire')}</span>
+          )}
+
+          <button
+            type="button"
+            onClick={handleAdd}
+            disabled={!firstVariant}
+            aria-label={t('product.addToCart')}
+            className="flex h-9 items-center gap-2 rounded-full border border-border px-3 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary disabled:opacity-40"
+          >
+            <IconCart className="h-4 w-4" /> {t('product.addToCart')}
+          </button>
         </div>
-      </CardHeader>
-      <CardContent className="p-4">
-        <Badge variant="secondary" className="mb-2 bg-accent/20 text-accent">{product.metalType}</Badge>
-        <CardTitle className="font-headline text-lg leading-tight">
-          <Link href={`/collections/${product.slug}`} className="hover:text-primary transition-colors">
-            {product.name}
-          </Link>
-        </CardTitle>
-      </CardContent>
-      <CardFooter className="p-4 flex justify-between items-center">
-        <p className="text-lg font-semibold text-primary">PKR {product.price.toLocaleString()}</p>
-        <Button asChild variant="outline">
-          <Link href={`/collections/${product.slug}`}>View</Link>
-        </Button>
-      </CardFooter>
-    </Card>
-  );
+      </div>
+    </Link>
+  )
 }

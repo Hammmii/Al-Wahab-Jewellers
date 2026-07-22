@@ -1,27 +1,55 @@
-import { products } from "@/lib/placeholder-data";
-import { ProductCard } from "@/components/products/ProductCard";
+import { Section } from '@/components/common'
+import { ProductCard } from '@/components/products/ProductCard'
+import { Stagger, StaggerItem } from '@/components/motion/reveal'
+import { getProducts, getProductsByCategory } from '@/lib/data/products'
+import { getCategories } from '@/lib/data/categories'
+import type { Category } from '@/lib/domain'
+import { CollectionsHeading, CollectionsEmpty, CategoryTabs } from '@/components/collections/collections-copy'
 
-export const metadata = {
-  title: "Collections - Al-Wahab Jewellers",
-  description: "Explore our exquisite collections of gold jewellery.",
-};
+const CATS_FALLBACK: Category[] = [
+  { id: 'rings', name: 'Rings', slug: 'rings', description: null, position: 0 },
+  { id: 'necklaces', name: 'Necklaces', slug: 'necklaces', description: null, position: 1 },
+  { id: 'bracelets', name: 'Bracelets', slug: 'bracelets', description: null, position: 2 },
+  { id: 'earrings', name: 'Earrings', slug: 'earrings', description: null, position: 3 },
+]
 
-export default function CollectionsPage() {
+export default async function CollectionsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ category?: string }>
+}) {
+  const params = await searchParams
+  const activeCategory = params?.category?.toLowerCase() ?? 'all'
+
+  const [categories, products] = await Promise.all([
+    getCategories().then((c) => (c.length ? c : CATS_FALLBACK)),
+    activeCategory === 'all'
+      ? getProducts()
+      : getProductsByCategory(activeCategory),
+  ])
+
+  const tabs = [{ name: 'All', slug: 'all' }, ...categories.map((c) => ({ name: c.name, slug: c.slug }))]
+
   return (
-    <div className="container mx-auto px-4 py-8 md:py-16">
-      <div className="text-center mb-12">
-        <h1 className="font-headline text-4xl md:text-5xl font-bold text-primary">Our Collections</h1>
-        <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Browse our curated selections of rings, necklaces, bracelets, and earrings, each crafted with passion and precision.
-        </p>
-      </div>
-      
-      {/* TODO: Add filter sidebar */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-    </div>
-  );
+    <>
+      <Section spacing="tight" className="pb-0">
+        <CollectionsHeading />
+        <CategoryTabs categories={categories} active={activeCategory} />
+      </Section>
+
+      <Section spacing="default" className="pt-8">
+        {products.length === 0 ? (
+          <CollectionsEmpty />
+        ) : (
+          <Stagger className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-5 lg:grid-cols-4">
+            {products.map((product) => (
+              <StaggerItem key={product.id}>
+                <ProductCard product={product} />
+              </StaggerItem>
+            ))}
+          </Stagger>
+        )}
+      </Section>
+    </>
+  )
 }
