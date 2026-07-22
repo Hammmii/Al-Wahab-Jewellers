@@ -7,6 +7,10 @@ import { publicImageUrl } from '@/lib/storage'
 /**
  * Admin product data access (service-role, server-only).
  * Unlike the public data layer, this reads ALL products (incl. inactive).
+ *
+ * We avoid embedded selects (`variants(*)`) because they depend on PostgREST's
+ * schema-cache knowing the foreign-key relationship; after migrations that
+ * cache can be stale and embedded selects silently return empty relations.
  */
 
 interface RawProduct {
@@ -19,9 +23,9 @@ interface RawProduct {
   metal_type: string | null
   is_featured: boolean
   is_active: boolean
-  variants: RawVariant[] | null
-  images: RawImage[] | null
+  created_at: string
 }
+
 interface RawVariant {
   id: string
   product_id: string
@@ -32,6 +36,7 @@ interface RawVariant {
   sku: string | null
   stock: number
 }
+
 interface RawImage {
   id: string
   product_id: string
@@ -51,6 +56,7 @@ const mapVariant = (v: RawVariant): ProductVariant => ({
   sku: v.sku,
   stock: v.stock,
 })
+
 const mapImage = (i: RawImage): ProductImage => ({
   id: i.id,
   productId: i.product_id,
@@ -59,7 +65,8 @@ const mapImage = (i: RawImage): ProductImage => ({
   position: i.position,
   isPrimary: i.is_primary,
 })
-const mapProduct = (p: RawProduct): Product => ({
+
+const mapProduct = (p: RawProduct, variants: RawVariant[], images: RawImage[]): Product => ({
   id: p.id,
   name: p.name,
   slug: p.slug,
@@ -69,31 +76,100 @@ const mapProduct = (p: RawProduct): Product => ({
   metalType: p.metal_type,
   isFeatured: p.is_featured,
   isActive: p.is_active,
-  variants: (p.variants ?? []).map(mapVariant),
-  images: (p.images ?? []).map(mapImage),
+  variants: variants.map(mapVariant),
+  images: images.map(mapImage),
 })
 
-const SELECT = '*, variants(*), images(*)'
+function logQueryError(
+  operation: string,
+  error: { message: string; details?: string; hint?: string; code?: string },
+) {
+  console.error(`[admin-products:${operation}] Supabase query failed: ${error.message}`, {
+    code: error.code,
+    details: error.details,
+    hint: error.hint,
+  })
+}
+
+function groupBy<T, K extends string | number>(items: T[], keyFn: (item: T) => K): Record<K, T[]> {
+  return items.reduce((acc, item) => {
+    const key = keyFn(item)
+    if (!acc[key]) acc[key] = []
+    acc[key].push(item)
+    return acc
+  }, {} as Record<K, T[]>)
+}
+
+async function attachVariantsAndImages(
+  supabase: NonNullable<ReturnType<typeof createAdminClient>>,
+  products: RawProduct[],
+): Promise<Product[]> {
+  if (products.length === 0) return []
+
+  const productIds = products.map((p) => p.id)
+
+  const [{ data: variants, error: variantsError }, { data: images, error: imagesError }] =
+    await Promise.all([
+      supabase.from('product_variants').select('*').in('product_id', productIds),
+      supabase
+        .from('product_images')
+        .select('*')
+        .in('product_id', productIds)
+        .order('position', { ascending: true }),
+    ])
+
+  if (variantsError) logQueryError('attachVariants', variantsError)
+  if (imagesError) logQueryError('attachImages', imagesError)
+
+  const variantsByProduct = groupBy<RawVariant, string>(variants ?? [], (v) => v.product_id)
+  const imagesByProduct = groupBy<RawImage, string>(images ?? [], (i) => i.product_id)
+
+  return products.map((p) =>
+    mapProduct(p, variantsByProduct[p.id] ?? [], imagesByProduct[p.id] ?? []),
+  )
+}
 
 export async function adminGetProducts(): Promise<Product[]> {
-  if (!isSupabaseConfigured()) return []
+  if (!isSupabaseConfigured()) {
+    console.warn('[admin-products:adminGetProducts] Supabase not configured')
+    return []
+  }
   const supabase = createAdminClient()
   if (!supabase) return []
+
   const { data, error } = await supabase
     .from('products')
-    .select(SELECT)
+    .select('*')
     .order('created_at', { ascending: false })
-  if (error || !data) return []
-  return (data as RawProduct[]).map(mapProduct)
+
+  if (error) {
+    logQueryError('adminGetProducts', error)
+    return []
+  }
+  if (!data) return []
+
+  return attachVariantsAndImages(supabase, data as RawProduct[])
 }
 
 export async function adminGetProduct(id: string): Promise<Product | null> {
-  if (!isSupabaseConfigured()) return null
+  if (!isSupabaseConfigured()) {
+    console.warn('[admin-products:adminGetProduct] Supabase not configured')
+    return null
+  }
   const supabase = createAdminClient()
   if (!supabase) return null
-  const { data, error } = await supabase.from('products').select(SELECT).eq('id', id).maybeSingle()
-  if (error || !data) return null
-  return mapProduct(data as RawProduct)
+
+  const { data, error } = await supabase.from('products').select('*').eq('id', id).maybeSingle()
+
+  if (error) {
+    logQueryError('adminGetProduct', error)
+    return null
+  }
+  if (!data) return null
+
+  const product = data as RawProduct
+  const [productWithRelations] = await attachVariantsAndImages(supabase, [product])
+  return productWithRelations ?? null
 }
 
 /** Lightweight row for the list view (id, name, slug, price, status). */

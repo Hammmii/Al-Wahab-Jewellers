@@ -17,7 +17,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params
   const product = await getProductBySlug(slug)
-  if (!product) return { title: 'Not found' }
+  if (!product) {
+    return {
+      title: `Not found — ${siteConfig.name}`,
+      description: siteConfig.description,
+    }
+  }
+
+  const imagePath =
+    product.images.find((i) => i.isPrimary)?.storagePath ?? product.images[0]?.storagePath
+  const imageUrl = imagePath ? publicImageUrl(imagePath) : null
+
   return {
     title: product.name,
     description: product.description ?? siteConfig.description,
@@ -25,6 +35,13 @@ export async function generateMetadata({
       title: product.name,
       description: product.description ?? undefined,
       url: `${siteConfig.url}/collections/${product.slug}`,
+      images: imageUrl ? [{ url: imageUrl, alt: product.name }] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.name,
+      description: product.description ?? undefined,
+      images: imageUrl ? { url: imageUrl, alt: product.name } : undefined,
     },
   }
 }

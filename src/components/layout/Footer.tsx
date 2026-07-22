@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Container } from '@/components/common'
 import { IconLocation } from '@/components/icons'
 import { useT } from '@/lib/i18n/language-context'
+import { siteConfig } from '@/lib/site'
 import type { TKey } from '@/lib/i18n/translations'
 
 const NAV: { href: string; labelKey: TKey }[] = [
@@ -17,6 +18,8 @@ const NAV: { href: string; labelKey: TKey }[] = [
 
 export function Footer() {
   const t = useT()
+  const phone = siteConfig.phone
+  const phoneDisplay = phone.replace(/(\d{4})(\d{3})(\d{4})/, '$1 $2 $3')
 
   return (
     <footer className="border-t border-border bg-card/40">
@@ -54,8 +57,13 @@ export function Footer() {
             <div className="mt-4 flex items-start gap-3 text-sm text-muted-foreground">
               <IconLocation className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
               <div>
-                <p>Sarafa Bazar, Shop 2</p>
-                <p>Multan, Pakistan</p>
+                <p>{siteConfig.address.street}</p>
+                <p>{siteConfig.address.city}, {siteConfig.address.country}</p>
+                <p className="mt-2">
+                  <a href={`tel:+92${phone.slice(1)}`} className="text-primary hover:underline">
+                    {phoneDisplay}
+                  </a>
+                </p>
               </div>
             </div>
             <p className="mt-4 text-xs text-muted-foreground/70">

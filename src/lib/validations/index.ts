@@ -44,6 +44,13 @@ export type CustomDesignInput = z.infer<typeof customDesignSchema>
 // ─── Orders (COD + bank transfer) ───────────────────────────────────────────
 export const paymentMethodSchema = z.enum(['cod', 'bank_transfer'])
 
+export const orderItemSchema = z.object({
+  productId: z.string().uuid(),
+  variantId: z.string().uuid(),
+  quantity: z.number().int().positive(),
+})
+export type OrderItemInput = z.infer<typeof orderItemSchema>
+
 export const orderSchema = z.object({
   customerName: z.string().min(2, 'Name is required').max(120),
   phone: phoneSchema,
@@ -56,17 +63,8 @@ export const orderSchema = z.object({
     province: z.string().min(2, 'Province is required').max(80),
     postalCode: z.string().max(20).optional(),
   }),
-  items: z
-    .array(
-      z.object({
-        productId: z.string().uuid(),
-        variantId: z.string().uuid().optional(),
-        name: z.string(),
-        price: z.number().nonnegative(),
-        quantity: z.number().int().positive(),
-      }),
-    )
-    .min(1, 'Your cart is empty'),
+  items: z.array(orderItemSchema).min(1, 'Your cart is empty'),
+  paymentProofPath: z.string().max(500).optional(),
   notes: z.string().max(1000).optional(),
 })
 export type OrderInput = z.infer<typeof orderSchema>

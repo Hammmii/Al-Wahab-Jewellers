@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
 import { getCurrentGoldRates } from '@/lib/data/gold-rates'
 
-// Rates change infrequently (admin sets the daily Sarafa rate); refresh every 5 min.
-export const revalidate = 300
+// Gold-rate data is public, but `getCurrentGoldRates` uses the cookie-based SSR
+// Supabase client (for RLS consistency), so this route must be dynamic.
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const rates = await getCurrentGoldRates()

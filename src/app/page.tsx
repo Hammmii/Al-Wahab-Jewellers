@@ -81,11 +81,7 @@ export default function Home() {
                 promise is simple: honest metal, honest weight, and work that lasts a lifetime.
               </p>
             </div>
-            <Button
-              asChild
-              variant="outline"
-              className="mt-8 border-primary/40 text-primary hover:bg-primary/10 hover:text-primary"
-            >
+            <Button asChild variant="outline" className="mt-8">
               <Link href="/about">Read our story</Link>
             </Button>
           </Reveal>
@@ -121,7 +117,7 @@ export default function Home() {
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
               Share your idea with us. We will craft a piece that is entirely yours.
             </p>
-            <Button asChild size="lg" className="gold-sweep mt-8">
+            <Button asChild size="lg" className="mt-8">
               <Link href="/custom-design">Start a Custom Design</Link>
             </Button>
           </div>

@@ -26,6 +26,11 @@ export async function getAdminStats() {
     supabase.from('contact_submissions').select('id', { count: 'exact', head: true }).eq('status', 'new'),
   ])
 
+  if (products.error) console.error('[admin:getAdminStats] products count failed:', products.error.message)
+  if (orders.error) console.error('[admin:getAdminStats] orders count failed:', orders.error.message)
+  if (custom.error) console.error('[admin:getAdminStats] custom count failed:', custom.error.message)
+  if (contact.error) console.error('[admin:getAdminStats] contact count failed:', contact.error.message)
+
   return {
     products: products.count ?? 0,
     pendingOrders: orders.count ?? 0,

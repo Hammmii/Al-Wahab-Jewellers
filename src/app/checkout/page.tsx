@@ -15,45 +15,106 @@ import { formatPKR } from '@/lib/format'
 import { orderSchema, type OrderInput } from '@/lib/validations'
 import { IconCart } from '@/components/icons'
 import { useT } from '@/lib/i18n/language-context'
+import { useToast } from '@/hooks/use-toast'
 
 export default function CheckoutPage() {
   const hydrated = useHydrated()
   const t = useT()
+  const { toast } = useToast()
   const items = useCart((s) => s.items)
   const subtotal = useCartSubtotal()
   const clear = useCart((s) => s.clear)
   const [mounted, setMounted] = useState(false)
+  const [paymentProofFile, setPaymentProofFile] = useState<File | null>(null)
   useEffect(() => setMounted(true), [])
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<OrderInput>({
     resolver: zodResolver(orderSchema),
     defaultValues: { paymentMethod: 'cod' },
   })
 
+  const paymentMethod = watch('paymentMethod')
+
+  const uploadPaymentProof = async (file: File): Promise<string | null> => {
+    const formData = new FormData()
+    formData.set('file', file)
+    const res = await fetch('/api/upload/payment-proof', { method: 'POST', body: formData })
+    const json = await res.json().catch(() => ({}))
+    if (!res.ok || !json.success) {
+      toast({
+        title: t('order.uploadFailed'),
+        description: json.message || t('order.uploadFailed'),
+        variant: 'destructive',
+      })
+      return null
+    }
+    return json.path as string
+  }
+
   const onSubmit = async (data: OrderInput) => {
+    let paymentProofPath: string | undefined
+
+    if (paymentMethod === 'bank_transfer') {
+      if (!paymentProofFile) {
+        toast({
+          title: t('order.paymentProofRequired'),
+          variant: 'destructive',
+        })
+        return
+      }
+      const path = await uploadPaymentProof(paymentProofFile)
+      if (!path) return
+      paymentProofPath = path
+    }
+
+    if (items.some((i) => !i.variantId)) {
+      toast({
+        title: t('order.unavailableError'),
+        variant: 'destructive',
+      })
+      return
+    }
+
     const payload = {
       ...data,
       items: items.map((i) => ({
         productId: i.productId,
-        variantId: i.variantId,
-        name: i.name,
-        price: i.price,
+        variantId: i.variantId!,
         quantity: i.quantity,
       })),
+      paymentProofPath,
     }
+
     const res = await fetch('/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     })
-    if (res.ok) {
-      clear()
-      window.location.href = '/checkout/success'
+
+    const json = await res.json().catch(() => ({}))
+
+    if (!res.ok) {
+      const title =
+        json.error === 'insufficient_stock'
+          ? t('order.stockError')
+          : json.error === 'variant_not_found'
+            ? t('order.unavailableError')
+            : t('order.orderFailed')
+      toast({
+        title,
+        description: json.message,
+        variant: 'destructive',
+      })
+      return
     }
+
+    clear()
+    window.location.href = '/checkout/success'
   }
 
   if (mounted && hydrated && items.length === 0) {
@@ -134,6 +195,24 @@ export default function CheckoutPage() {
                   </span>
                 </label>
               </div>
+
+              {paymentMethod === 'bank_transfer' && (
+                <div className="mt-4">
+                  <Field label={t('order.paymentProof')}>
+                    <Input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,application/pdf"
+                      onChange={(e) => setPaymentProofFile(e.target.files?.[0] ?? null)}
+                    />
+                  </Field>
+                  {paymentProofFile ? (
+                    <p className="mt-2 text-xs text-muted-foreground">{paymentProofFile.name}</p>
+                  ) : (
+                    <p className="mt-2 text-xs text-muted-foreground">{t('order.paymentProofDesc')}</p>
+                  )}
+                </div>
+              )}
+
               <div className="mt-4">
                 <Field label={t('order.notes')}>
                   <Textarea rows={3} {...register('notes')} />

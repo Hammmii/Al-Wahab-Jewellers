@@ -5,7 +5,10 @@ const isConfigured = () =>
   !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 export async function getCategories(): Promise<Category[]> {
-  if (!isConfigured()) return []
+  if (!isConfigured()) {
+    console.warn('[categories:getCategories] Supabase not configured')
+    return []
+  }
   const supabase = await createClient()
   if (!supabase) return []
   const { data, error } = await supabase
@@ -13,7 +16,15 @@ export async function getCategories(): Promise<Category[]> {
     .select('*')
     .order('position', { ascending: true })
 
-  if (error || !data) return []
+  if (error) {
+    console.error(`[categories:getCategories] Supabase query failed: ${error.message}`, {
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+    })
+    return []
+  }
+  if (!data) return []
   return (data as Array<{
     id: string
     name: string
@@ -30,7 +41,10 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getCollections(): Promise<Collection[]> {
-  if (!isConfigured()) return []
+  if (!isConfigured()) {
+    console.warn('[categories:getCollections] Supabase not configured')
+    return []
+  }
   const supabase = await createClient()
   if (!supabase) return []
   const { data, error } = await supabase
@@ -38,7 +52,15 @@ export async function getCollections(): Promise<Collection[]> {
     .select('*')
     .order('name', { ascending: true })
 
-  if (error || !data) return []
+  if (error) {
+    console.error(`[categories:getCollections] Supabase query failed: ${error.message}`, {
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+    })
+    return []
+  }
+  if (!data) return []
   return (data as Array<{
     id: string
     name: string

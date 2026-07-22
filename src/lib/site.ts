@@ -14,6 +14,12 @@ export const siteConfig = {
     city: 'Multan',
     country: 'PK',
   },
+  phone: '03009631161',
+  whatsapp: '03009631161',
+  owner: {
+    name: 'Sikandar Hayat',
+    experience: '30+ years',
+  },
   keywords: [
     'gold jewellers Multan',
     'Sarafa Bazar gold',
@@ -21,5 +27,6 @@ export const siteConfig = {
     'gold necklaces',
     'bridal jewellery Multan',
     'bespoke gold design',
+    'Sikandar Hayat jewellers',
   ],
 } as const

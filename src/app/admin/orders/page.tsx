@@ -66,7 +66,9 @@ export default async function AdminOrdersPage() {
               {orders.map((o) => (
                 <tr key={o.id}>
                   <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
-                    {String(o.id).slice(0, 8).toUpperCase()}
+                    <Link href={`/admin/orders/${o.id}`} className="hover:text-primary hover:underline">
+                      {String(o.id).slice(0, 8).toUpperCase()}
+                    </Link>
                   </td>
                   <td className="px-4 py-3 text-foreground">{o.customer_name}</td>
                   <td className="px-4 py-3 text-muted-foreground">

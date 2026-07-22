@@ -21,7 +21,16 @@ export async function getCurrentGoldRates(): Promise<GoldRate[] | null> {
       .from('current_gold_rates')
       .select('karat, rate_per_tola, rate_per_10g, rate_per_gram, source, effective_at')
 
-    if (error || !data || data.length === 0) return null
+    if (error) {
+      console.error('[gold-rates:getCurrentGoldRates] Supabase query failed:', {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+      })
+      return null
+    }
+    if (!data || data.length === 0) return null
 
     const rows = data as Array<{
       karat: Karat
@@ -40,7 +49,8 @@ export async function getCurrentGoldRates(): Promise<GoldRate[] | null> {
       source: r.source,
       effectiveAt: r.effective_at,
     }))
-  } catch {
+  } catch (err) {
+    console.error('[gold-rates:getCurrentGoldRates] Unexpected error:', err)
     return null
   }
 }

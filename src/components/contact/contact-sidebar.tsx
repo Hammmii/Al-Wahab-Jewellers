@@ -1,6 +1,7 @@
 'use client'
 
 import { useT } from '@/lib/i18n/language-context'
+import { siteConfig } from '@/lib/site'
 
 export function ContactHeading() {
   const t = useT()
@@ -15,6 +16,8 @@ export function ContactHeading() {
 
 export function ContactSidebar() {
   const t = useT()
+  const phone = siteConfig.phone
+  const phoneDisplay = phone.replace(/(\d{4})(\d{3})(\d{4})/, '$1 $2 $3')
   return (
     <div className="space-y-6">
       <div className="surface-card flex items-start gap-4 rounded-xl p-6">
@@ -23,13 +26,33 @@ export function ContactSidebar() {
         </span>
         <div>
           <h3 className="font-headline text-lg text-foreground">{t('contact.showroom')}</h3>
-          <p className="text-sm text-muted-foreground">Sarafa Bazar, Shop 2, Multan, Pakistan</p>
+          <p className="text-sm text-muted-foreground">
+            {siteConfig.address.street}, {siteConfig.address.city}, {siteConfig.address.country}
+          </p>
         </div>
       </div>
 
       <div className="surface-card rounded-xl p-6 text-sm text-muted-foreground">
         <h3 className="font-headline text-lg text-foreground">{t('contact.reachUs')}</h3>
-        <p className="mt-2">{t('contact.reachDesc')}</p>
+        <p className="mt-2">
+          Call or WhatsApp:{' '}
+          <a
+            href={`tel:+92${phone.slice(1)}`}
+            className="font-medium text-primary hover:underline"
+          >
+            {phoneDisplay}
+          </a>
+        </p>
+        <p className="mt-2">
+          <a
+            href={`https://wa.me/92300${phone.slice(4)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline"
+          >
+            Message us on WhatsApp
+          </a>
+        </p>
       </div>
 
       <div className="surface-card rounded-xl p-6 text-sm text-muted-foreground">

@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { saveVirtualTryOnSubmission } from '@/lib/submissions';
+import { sendEmail } from '@/lib/email/send';
+import {
+  VirtualTryOnConfirmationEmail,
+  VirtualTryOnNotificationEmail,
+} from '@/lib/email/templates/virtual-try-on';
 
 // Define validation schema for virtual try-on quote request
 const virtualTryOnSchema = z.object({
@@ -31,8 +36,36 @@ export async function POST(request: NextRequest) {
     const { imageData, ...dataToSave } = result.data;
     const quoteId = await saveVirtualTryOnSubmission(dataToSave);
 
-    // TODO: Send email notification if email service is configured
-    // This is where you would integrate with Resend, SendGrid, etc.
+    // Notify the shop. Email failures are logged but do not block the success response.
+    try {
+      await sendEmail({
+        to: process.env.NOTIFY_EMAIL ?? 'owner@alwahabjewellers.com',
+        subject: `Virtual try-on request for ${result.data.ringId}`,
+        react: VirtualTryOnNotificationEmail({
+          name: result.data.name,
+          email: result.data.email,
+          phone: result.data.phone,
+          ringId: result.data.ringId,
+          hasImage: !!imageData,
+        }),
+      });
+
+      // Send a confirmation to the customer if they provided an email.
+      if (result.data.email) {
+        await sendEmail({
+          to: result.data.email,
+          subject: 'We received your virtual try-on request',
+          react: VirtualTryOnConfirmationEmail({
+            name: result.data.name,
+            email: result.data.email,
+            phone: result.data.phone,
+            ringId: result.data.ringId,
+          }),
+        });
+      }
+    } catch (emailError) {
+      console.error('[virtual-try-on] email notification failed', emailError);
+    }
 
     // Return success response
     return NextResponse.json(
