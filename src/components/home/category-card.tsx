@@ -4,24 +4,35 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n/language-context'
 import type { TKey } from '@/lib/i18n/translations'
-import type { ComponentType } from 'react'
+import { IconRing, IconNecklace, IconBracelet, IconEarring } from '@/components/icons'
+
+/** Icon key (serializable across the server→client boundary). */
+export type CategoryIconKey = 'rings' | 'necklaces' | 'bracelets' | 'earrings'
+
+const ICONS = {
+  rings: IconRing,
+  necklaces: IconNecklace,
+  bracelets: IconBracelet,
+  earrings: IconEarring,
+} as const
 
 interface CategoryCardProps {
   href: string
   nameKey: TKey
   descKey: TKey
-  Icon: ComponentType<{ className?: string }>
+  icon: CategoryIconKey
   className?: string
 }
 
 /**
  * Premium, reusable category card.
  * Tall, with a faceted gold gradient backdrop, a large watermark icon,
- * a refined gold frame, and a hover reveal ("Shop now"). Reused across
- * the site wherever categories are shown.
+ * a refined gold frame, and a hover reveal ("Shop now"). Takes a serializable
+ * icon KEY (not a component) so it can be rendered from server components.
  */
-export function CategoryCard({ href, nameKey, descKey, Icon, className }: CategoryCardProps) {
+export function CategoryCard({ href, nameKey, descKey, icon, className }: CategoryCardProps) {
   const t = useT()
+  const Icon = ICONS[icon]
 
   return (
     <Link
@@ -61,3 +72,4 @@ export function CategoryCard({ href, nameKey, descKey, Icon, className }: Catego
     </Link>
   )
 }
+

@@ -6,25 +6,21 @@ import GoldbarVideo from '@/components/GoldbarVideo'
 import { Hero } from '@/components/home/hero'
 import { HeroActions } from '@/components/home/hero-actions'
 import { FeaturedProducts } from '@/components/home/featured-products'
-import { CategoryCard } from '@/components/home/category-card'
+import { CategoryCard, type CategoryIconKey } from '@/components/home/category-card'
 import { CategoriesHeading } from '@/components/home/categories-copy'
 import {
-  IconBracelet,
   IconCertificate,
-  IconEarring,
   IconGift,
   IconLocation,
-  IconNecklace,
   IconPurity,
-  IconRing,
   IconShipping,
 } from '@/components/icons'
 
-const CATEGORIES = [
-  { slug: 'rings', nameKey: 'cat.rings' as const, descKey: 'cat.ringsDesc' as const, Icon: IconRing },
-  { slug: 'necklaces', nameKey: 'cat.necklaces' as const, descKey: 'cat.necklacesDesc' as const, Icon: IconNecklace },
-  { slug: 'bracelets', nameKey: 'cat.bracelets' as const, descKey: 'cat.braceletsDesc' as const, Icon: IconBracelet },
-  { slug: 'earrings', nameKey: 'cat.earrings' as const, descKey: 'cat.earringsDesc' as const, Icon: IconEarring },
+const CATEGORIES: { slug: string; nameKey: 'cat.rings'|'cat.necklaces'|'cat.bracelets'|'cat.earrings'; descKey: 'cat.ringsDesc'|'cat.necklacesDesc'|'cat.braceletsDesc'|'cat.earringsDesc'; icon: CategoryIconKey }[] = [
+  { slug: 'rings', nameKey: 'cat.rings', descKey: 'cat.ringsDesc', icon: 'rings' },
+  { slug: 'necklaces', nameKey: 'cat.necklaces', descKey: 'cat.necklacesDesc', icon: 'necklaces' },
+  { slug: 'bracelets', nameKey: 'cat.bracelets', descKey: 'cat.braceletsDesc', icon: 'bracelets' },
+  { slug: 'earrings', nameKey: 'cat.earrings', descKey: 'cat.earringsDesc', icon: 'earrings' },
 ]
 
 const PROMISES = [
@@ -48,13 +44,13 @@ export default function Home() {
       <Section className="bg-card/30">
         <CategoriesHeading />
         <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-5">
-          {CATEGORIES.map(({ slug, nameKey, descKey, Icon }) => (
+          {CATEGORIES.map(({ slug, nameKey, descKey, icon }) => (
             <Reveal key={slug}>
               <CategoryCard
                 href={`/collections?category=${slug}`}
                 nameKey={nameKey}
                 descKey={descKey}
-                Icon={Icon}
+                icon={icon}
               />
             </Reveal>
           ))}
