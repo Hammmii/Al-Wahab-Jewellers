@@ -131,7 +131,7 @@ async function attachVariantsAndImages(
 
 export async function adminGetProducts(): Promise<Product[]> {
   if (!isSupabaseConfigured()) {
-    console.warn('[admin-products:adminGetProducts] Supabase not configured')
+    if (process.env.NODE_ENV !== "production") console.warn('[admin-products:adminGetProducts] Supabase not configured')
     return []
   }
   const supabase = createAdminClient()
@@ -153,7 +153,7 @@ export async function adminGetProducts(): Promise<Product[]> {
 
 export async function adminGetProduct(id: string): Promise<Product | null> {
   if (!isSupabaseConfigured()) {
-    console.warn('[admin-products:adminGetProduct] Supabase not configured')
+    if (process.env.NODE_ENV !== "production") console.warn('[admin-products:adminGetProduct] Supabase not configured')
     return null
   }
   const supabase = createAdminClient()

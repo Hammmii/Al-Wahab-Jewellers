@@ -161,7 +161,7 @@ function toWebsearchPrefixTerm(term: string): string {
 /** All active products, newest first. */
 export async function getProducts(): Promise<Product[]> {
   if (!isConfigured()) {
-    console.warn('[products:getProducts] Supabase not configured')
+    if (process.env.NODE_ENV !== "production") console.warn('[products:getProducts] Supabase not configured')
     return []
   }
   const supabase = await createClient()
@@ -185,7 +185,7 @@ export async function getProducts(): Promise<Product[]> {
 /** Featured active products for the homepage carousel. */
 export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
   if (!isConfigured()) {
-    console.warn('[products:getFeaturedProducts] Supabase not configured')
+    if (process.env.NODE_ENV !== "production") console.warn('[products:getFeaturedProducts] Supabase not configured')
     return []
   }
   const supabase = await createClient()
@@ -211,7 +211,7 @@ export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
 /** A single active product by slug, or null. */
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   if (!isConfigured()) {
-    console.warn('[products:getProductBySlug] Supabase not configured')
+    if (process.env.NODE_ENV !== "production") console.warn('[products:getProductBySlug] Supabase not configured')
     return null
   }
   const supabase = await createClient()
@@ -238,7 +238,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 /** Active products within a category (by category slug). */
 export async function getProductsByCategory(categorySlug: string): Promise<Product[]> {
   if (!isConfigured()) {
-    console.warn('[products:getProductsByCategory] Supabase not configured')
+    if (process.env.NODE_ENV !== "production") console.warn('[products:getProductsByCategory] Supabase not configured')
     return []
   }
   const supabase = await createClient()
@@ -265,7 +265,7 @@ export async function getProductsByCategory(categorySlug: string): Promise<Produ
 /** Full-text + fuzzy search over active products. */
 export async function searchProducts(query: string): Promise<Product[]> {
   if (!isConfigured() || !query.trim()) {
-    if (!isConfigured()) console.warn('[products:searchProducts] Supabase not configured')
+    if (!isConfigured()) if (process.env.NODE_ENV !== "production") console.warn('[products:searchProducts] Supabase not configured')
     return []
   }
   const supabase = await createClient()

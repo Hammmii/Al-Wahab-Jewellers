@@ -6,7 +6,7 @@ const isConfigured = () =>
 
 export async function getCategories(): Promise<Category[]> {
   if (!isConfigured()) {
-    console.warn('[categories:getCategories] Supabase not configured')
+    if (process.env.NODE_ENV !== "production") console.warn('[categories:getCategories] Supabase not configured')
     return []
   }
   const supabase = await createClient()
@@ -42,7 +42,7 @@ export async function getCategories(): Promise<Category[]> {
 
 export async function getCollections(): Promise<Collection[]> {
   if (!isConfigured()) {
-    console.warn('[categories:getCollections] Supabase not configured')
+    if (process.env.NODE_ENV !== "production") console.warn('[categories:getCollections] Supabase not configured')
     return []
   }
   const supabase = await createClient()
