@@ -1,12 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // Quality gates: now type-clean and lint-clean, so enforce both during builds.
+  // Quality gate: type-check during build (fail the build on type errors).
   typescript: {
     ignoreBuildErrors: false,
-  },
-  eslint: {
-    ignoreDuringBuilds: false,
   },
   images: {
     // Remote image hosts used by product imagery and uploads.
