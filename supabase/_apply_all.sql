@@ -61,6 +61,20 @@ returns trigger language plpgsql as $$
 begin new.updated_at = now(); return new; end;
 $$;
 
+-- ── 4b. SECURITY FUNCTION STUBS ────────────────────────────────────────────
+-- Policies below reference these functions. PostgreSQL needs them to exist
+-- at policy-creation time, so we create safe stubs here and replace them with
+-- real implementations after all tables exist (section 5b).
+create or replace function public.is_admin()
+returns boolean language sql security definer set search_path = public as $$
+  select false;
+$$;
+
+create or replace function public.is_verified_buyer(p_product_id uuid)
+returns boolean language sql security definer set search_path = public as $$
+  select false;
+$$;
+
 -- ── 5. TABLES ──────────────────────────────────────────────────────────────
 
 -- profiles (1:1 with auth.users)
@@ -293,7 +307,8 @@ create index reviews_product_idx  on public.reviews (product_id);
 create index reviews_customer_idx on public.reviews (customer_id);
 
 -- ── 5b. SECURITY FUNCTIONS + DEPENDENT POLICIES ────────────────────────────
--- Defined AFTER all tables exist (they reference profiles / orders / order_items).
+-- Replace the stubs from section 4b with real implementations now that all
+-- referenced tables exist.
 create or replace function public.is_admin()
 returns boolean language sql security definer set search_path = public as $$
   select coalesce((select is_admin from public.profiles where id = auth.uid()), false);
