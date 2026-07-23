@@ -2,10 +2,10 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Container, Section, SectionHeading } from '@/components/common'
 import { Reveal } from '@/components/motion/reveal'
-import GoldbarVideo from '@/components/GoldbarVideo'
 import { Hero } from '@/components/home/hero'
 import { HeroActions } from '@/components/home/hero-actions'
 import { FeaturedProducts } from '@/components/home/featured-products'
+import { HeritageSection } from '@/components/home/heritage-content'
 import { CategoryCard, type CategoryIconKey } from '@/components/home/category-card'
 import { CategoriesHeading } from '@/components/home/categories-copy'
 import {
@@ -59,33 +59,7 @@ export default function Home() {
 
       {/* Heritage */}
       <Section>
-        <div className="grid items-center gap-10 md:grid-cols-2 md:gap-12">
-          <Reveal>
-            <div
-              className="overflow-hidden rounded-xl border border-border bg-black"
-              style={{ aspectRatio: '6 / 7', minHeight: 320 }}
-            >
-              <GoldbarVideo />
-            </div>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <SectionHeading align="left" eyebrow="Our Story" title="A Family of Goldsmiths" />
-            <div className="mt-6 space-y-4 text-base leading-relaxed text-muted-foreground">
-              <p>
-                Al-Wahab Jewellers is a family shop in Multan&apos;s{' '}
-                <strong className="text-foreground">Sarafa Bazar (Shop 2)</strong>, the gold market
-                where fine craftsmanship has been passed down for generations.
-              </p>
-              <p>
-                We use only genuine gold. Every piece is weighed, stamped, and finished by hand. Our
-                promise is simple: honest metal, honest weight, and work that lasts a lifetime.
-              </p>
-            </div>
-            <Button asChild variant="outline" className="mt-8">
-              <Link href="/about">Read our story</Link>
-            </Button>
-          </Reveal>
-        </div>
+        <HeritageSection />
       </Section>
 
       {/* The promise */}

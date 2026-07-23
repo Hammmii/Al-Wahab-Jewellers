@@ -235,6 +235,10 @@ export const translations = {
   'section.categoriesSub': { en: 'Find gold for every occasion.', ur: 'ہر موقع کے لیے سونا تلاش کریں۔' },
   'section.promise': { en: 'Why choose Al-Wahab', ur: 'الوہاب کو کیوں چنیں' },
   'section.heritage': { en: 'A Family of Goldsmiths', ur: 'سوناروں کا خاندان' },
+  'heritage.eyebrow': { en: 'Our Story', ur: 'ہماری کہانی' },
+  'heritage.p1': { en: 'Al-Wahab Jewellers is a family shop in Multan’s Sarafa Bazar (Shop 2), the gold market where fine craftsmanship has been passed down for generations.', ur: 'الوہاب جیولرز ملتان کے سرافہ بازار (دکان 2) میں ایک خاندانی دکان ہے، جہاں نسلوں سے سونے کا fined کام ہو رہا ہے۔' },
+  'heritage.p2': { en: 'We use only genuine gold. Every piece is weighed, stamped, and finished by hand. Our promise is simple: honest metal, honest weight, and work that lasts a lifetime.', ur: 'ہم صرف خالص سونا استعمال کرتے ہیں۔ ہر شے کا وزن، ہال مارک، اور ہاتھ سے فنشنگ کی جاتی ہے۔ ہمارا وعدہ سادہ ہے: ایماندار دھات، ایماندار وزن، اور کام جو عمریں قائم رہے۔' },
+  'heritage.cta': { en: 'Read our story', ur: 'ہماری کہانی پڑھیں' },
 
   // Categories
   'cat.rings': { en: 'Rings', ur: 'انگوٹھیاں' },
