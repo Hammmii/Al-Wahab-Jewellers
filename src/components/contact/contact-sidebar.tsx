@@ -38,6 +38,7 @@ export function ContactSidebar() {
           Call or WhatsApp:{' '}
           <a
             href={`tel:+92${phone.slice(1)}`}
+            dir="ltr"
             className="font-medium text-primary hover:underline"
           >
             {phoneDisplay}

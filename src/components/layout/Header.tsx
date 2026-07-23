@@ -21,11 +21,6 @@ const MenuIcon = ({ className }: { className?: string }) => (
     <path d="M4 7 H20 M4 12 H20 M4 17 H20" />
   </svg>
 )
-const CloseIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.25} strokeLinecap="round" className={cn('icon h-5 w-5', className)}>
-    <path d="M6 6 L18 18 M18 6 L6 18" />
-  </svg>
-)
 
 const navLinks = [
   { href: '/', labelKey: 'nav.home' as const },
@@ -112,7 +107,7 @@ export function Header() {
             className="relative text-muted-foreground hover:text-primary"
           >
             <Link href="/collections" aria-label="Search collections">
-              <IconSearch className="h-5 w-5" />
+              <IconSearch className="h-6 w-6" />
             </Link>
           </Button>
 
@@ -123,7 +118,7 @@ export function Header() {
             className="relative text-muted-foreground hover:text-primary"
           >
             <Link href="/wishlist" aria-label="Wishlist">
-              <IconHeart className="h-5 w-5" />
+              <IconHeart className="h-6 w-6" />
               <CountBadge count={wishlistCount} />
             </Link>
           </Button>
@@ -135,7 +130,7 @@ export function Header() {
             className="relative text-muted-foreground hover:text-primary"
           >
             <Link href="/cart" aria-label="Cart">
-              <IconCart className="h-5 w-5" />
+              <IconCart className="h-6 w-6" />
               <CountBadge count={cartCount} />
             </Link>
           </Button>
@@ -154,11 +149,8 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] border-border bg-card p-0 sm:w-[380px]">
               <div className="flex h-full flex-col">
-                <div className="flex items-center justify-between border-b border-border p-4">
+                <div className="border-b border-border p-4">
                   <BrandLockup />
-                  <Button variant="ghost" size="icon" onClick={() => setOpen(false)} aria-label="Close menu">
-                    <CloseIcon />
-                  </Button>
                 </div>
                 <nav className="mt-4 flex flex-col gap-1 p-4">
                   {navLinks.map((link) => (
@@ -181,12 +173,12 @@ export function Header() {
                 <div className="mt-auto grid grid-cols-2 gap-2 border-t border-border p-4">
                   <Button asChild variant="outline" onClick={() => setOpen(false)}>
                     <Link href="/wishlist" className="flex items-center justify-center gap-2">
-                      <IconHeart className="h-5 w-5" /> {t('nav.wishlist')}
+                      <IconHeart className="h-6 w-6" /> {t('nav.wishlist')}
                     </Link>
                   </Button>
                   <Button asChild onClick={() => setOpen(false)}>
                     <Link href="/cart" className="flex items-center justify-center gap-2">
-                      <IconCart className="h-5 w-5" /> Cart
+                      <IconCart className="h-6 w-6" /> Cart
                     </Link>
                   </Button>
                 </div>

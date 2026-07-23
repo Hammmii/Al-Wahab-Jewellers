@@ -60,7 +60,7 @@ export function Footer() {
                 <p>{siteConfig.address.street}</p>
                 <p>{siteConfig.address.city}, {siteConfig.address.country}</p>
                 <p className="mt-2">
-                  <a href={`tel:+92${phone.slice(1)}`} className="text-primary hover:underline">
+                  <a href={`tel:+92${phone.slice(1)}`} dir="ltr" className="text-primary hover:underline">
                     {phoneDisplay}
                   </a>
                 </p>
