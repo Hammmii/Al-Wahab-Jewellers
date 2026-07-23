@@ -1,10 +1,7 @@
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { isSupabaseConfigured } from '@/lib/supabase/configured'
 import { formatPKR, formatDate } from '@/lib/format'
-import { EmptyState } from '@/components/common'
-import { IconLocation } from '@/components/icons'
+import { OrdersHeading, OrdersEmpty } from '@/components/admin/admin-copy'
 
 interface OrderRow {
   id: string
@@ -33,22 +30,10 @@ export default async function AdminOrdersPage() {
 
   return (
     <div>
-      <h1 className="font-headline text-3xl text-foreground">Orders</h1>
-      <p className="mt-1 text-sm text-muted-foreground">{orders.length} order(s)</p>
+      <OrdersHeading count={orders.length} />
 
       {orders.length === 0 ? (
-        <div className="mt-8">
-          <EmptyState
-            icon={<IconLocation className="h-10 w-10" />}
-            title="No orders yet"
-            description="Customer orders will appear here once the store is live."
-            action={
-              <Button asChild variant="outline">
-                <Link href="/">View store</Link>
-              </Button>
-            }
-          />
-        </div>
+        <OrdersEmpty />
       ) : (
         <div className="surface-card mt-6 overflow-hidden rounded-xl">
           <table className="w-full text-sm">
@@ -66,13 +51,11 @@ export default async function AdminOrdersPage() {
               {orders.map((o) => (
                 <tr key={o.id}>
                   <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
-                    <Link href={`/admin/orders/${o.id}`} className="hover:text-primary hover:underline">
-                      {String(o.id).slice(0, 8).toUpperCase()}
-                    </Link>
+                    {String(o.id).slice(0, 8).toUpperCase()}
                   </td>
                   <td className="px-4 py-3 text-foreground">{o.customer_name}</td>
                   <td className="px-4 py-3 text-muted-foreground">
-                    {o.payment_method === 'cod' ? 'COD' : 'Bank transfer'}
+                    {o.payment_method === 'cod' ? 'COD' : 'Bank'}
                   </td>
                   <td className="px-4 py-3 capitalize text-muted-foreground">{o.status}</td>
                   <td className="px-4 py-3 text-foreground">{formatPKR(o.total)}</td>

@@ -52,11 +52,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     )
   }
 
-  // Serializable icon KEYS (not components) — resolved inside the client Shell.
+  // Serializable icon KEYS + translation keys (not components/functions).
   const nav = [
-    { href: '/admin', label: 'Dashboard', iconKey: 'dashboard' as const },
-    { href: '/admin/products', label: 'Products', iconKey: 'products' as const },
-    { href: '/admin/orders', label: 'Orders', iconKey: 'orders' as const },
+    { href: '/admin', labelKey: 'admin.dashboard' as const, iconKey: 'dashboard' as const },
+    { href: '/admin/products', labelKey: 'admin.productsNav' as const, iconKey: 'products' as const },
+    { href: '/admin/orders', labelKey: 'admin.ordersNav' as const, iconKey: 'orders' as const },
   ]
 
   return <AdminShell nav={nav} email={user.email}>{children}</AdminShell>

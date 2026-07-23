@@ -6,6 +6,8 @@ import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { IconCertificate, IconRing, IconLocation } from '@/components/icons'
+import { useT } from '@/lib/i18n/language-context'
+import type { TKey } from '@/lib/i18n/translations'
 
 /** Serializable icon key (safe to pass across the server→client boundary). */
 export type AdminIconKey = 'dashboard' | 'products' | 'orders'
@@ -18,7 +20,7 @@ const ICONS: Record<AdminIconKey, ComponentType<{ className?: string }>> = {
 
 interface NavItem {
   href: string
-  label: string
+  labelKey: TKey
   iconKey: AdminIconKey
 }
 
@@ -34,6 +36,7 @@ export function AdminShell({
   const pathname = usePathname()
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const t = useT()
 
   const signOut = async () => {
     const supabase = createClient()
@@ -46,11 +49,11 @@ export function AdminShell({
       <div className="flex h-16 items-center border-b border-border px-6">
         <Link href="/admin" className="flex items-center gap-2">
           <span className="font-headline text-lg font-semibold text-primary">Al-Wahab</span>
-          <span className="text-xs text-muted-foreground">Admin</span>
+          <span className="text-xs text-muted-foreground">{t('admin.portal')}</span>
         </Link>
       </div>
       <nav className="flex-1 space-y-1 px-3 py-4">
-        {nav.map(({ href, label, iconKey }) => {
+        {nav.map(({ href, labelKey, iconKey }) => {
           const Icon = ICONS[iconKey]
           const active = pathname === href || pathname.startsWith(href + '/')
           return (
@@ -66,7 +69,7 @@ export function AdminShell({
               )}
             >
               <Icon className="h-5 w-5" />
-              {label}
+              {t(labelKey)}
             </Link>
           )
         })}
@@ -78,7 +81,7 @@ export function AdminShell({
           onClick={signOut}
           className="w-full rounded-md px-3 py-2 text-left text-sm text-destructive transition-colors hover:bg-destructive/10"
         >
-          Sign out
+          {t('admin.signOut')}
         </button>
       </div>
     </>
@@ -99,12 +102,12 @@ export function AdminShell({
           onClick={() => setMobileOpen((v) => !v)}
           className="text-sm text-muted-foreground"
         >
-          Menu
+          {t('admin.menu')}
         </button>
       </div>
       {mobileOpen ? (
         <div className="flex flex-col border-b border-border bg-background px-3 py-2 md:hidden">
-          {nav.map(({ href, label, iconKey }) => {
+          {nav.map(({ href, labelKey, iconKey }) => {
             const Icon = ICONS[iconKey]
             return (
             <Link
@@ -113,7 +116,7 @@ export function AdminShell({
               onClick={() => setMobileOpen(false)}
               className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground"
             >
-              <Icon className="h-5 w-5" /> {label}
+              <Icon className="h-5 w-5" /> {t(labelKey)}
             </Link>
             )
           })}
@@ -122,7 +125,7 @@ export function AdminShell({
             onClick={signOut}
             className="mt-1 rounded-md px-3 py-2 text-left text-sm text-destructive"
           >
-            Sign out
+            {t('admin.signOut')}
           </button>
         </div>
       ) : null}

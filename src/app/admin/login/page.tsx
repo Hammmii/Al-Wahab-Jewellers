@@ -6,10 +6,12 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { createClient } from '@/lib/supabase/client'
+import { useT } from '@/lib/i18n/language-context'
 
 export default function AdminLoginPage() {
   const router = useRouter()
   const search = useSearchParams()
+  const t = useT()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -22,7 +24,7 @@ export default function AdminLoginPage() {
 
     const supabase = createClient()
     if (!supabase) {
-      setError('Authentication is not available yet.')
+      setError(t('admin.notAvailable'))
       setLoading(false)
       return
     }
@@ -45,8 +47,8 @@ export default function AdminLoginPage() {
       <div className="surface-card w-full max-w-md rounded-xl p-8">
         <div className="text-center">
           <span className="font-urdu text-3xl text-gold-shimmer">الوَہاب جیولرز</span>
-          <h1 className="mt-2 font-headline text-2xl text-foreground">Admin Sign In</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Sign in to the management portal</p>
+          <h1 className="mt-2 font-headline text-2xl text-foreground">{t('admin.signIn')}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t('admin.signInSub')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
@@ -56,7 +58,7 @@ export default function AdminLoginPage() {
             </div>
           ) : null}
           <label className="block">
-            <span className="mb-1.5 block text-sm font-medium text-foreground">Email</span>
+            <span className="mb-1.5 block text-sm font-medium text-foreground">{t('admin.email')}</span>
             <Input
               type="email"
               value={email}
@@ -66,7 +68,7 @@ export default function AdminLoginPage() {
             />
           </label>
           <label className="block">
-            <span className="mb-1.5 block text-sm font-medium text-foreground">Password</span>
+            <span className="mb-1.5 block text-sm font-medium text-foreground">{t('admin.password')}</span>
             <Input
               type="password"
               value={password}
@@ -76,12 +78,12 @@ export default function AdminLoginPage() {
             />
           </label>
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Signing in…' : 'Sign In'}
+            {loading ? t('admin.signingIn') : t('admin.signInBtn')}
           </Button>
         </form>
 
         <Link href="/" className="mt-6 block text-center text-sm text-muted-foreground hover:text-primary">
-          ← Back to store
+          ← {t('admin.backToStore')}
         </Link>
       </div>
     </div>

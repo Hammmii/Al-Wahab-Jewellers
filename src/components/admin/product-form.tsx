@@ -26,6 +26,7 @@ export interface ProductFormValues {
   isFeatured: boolean
   isActive: boolean
   variants: VariantInput[]
+  images: string[] // storage paths
 }
 
 export function ProductForm({
@@ -45,8 +46,34 @@ export function ProductForm({
   const [variants, setVariants] = useState<VariantInput[]>(
     initial?.variants ?? [{ metalPurity: '22k', price: 0, stock: 0 }],
   )
+  const [images, setImages] = useState<string[]>(initial?.images ?? [])
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState('')
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
+
+  const handleUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return
+    setUploading(true)
+    setUploadError('')
+    const newPaths: string[] = []
+    for (const file of Array.from(files)) {
+      const formData = new FormData()
+      formData.set('file', file)
+      const res = await fetch('/api/upload/product-image', { method: 'POST', body: formData })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok || !json.success) {
+        setUploadError(json.message || 'Upload failed')
+        setUploading(false)
+        return
+      }
+      newPaths.push(json.path)
+    }
+    setImages((prev) => [...prev, ...newPaths])
+    setUploading(false)
+  }
+
+  const removeImage = (path: string) => setImages((prev) => prev.filter((p) => p !== path))
 
   const updateVariant = (i: number, patch: Partial<VariantInput>) =>
     setVariants((vs) => vs.map((v, idx) => (idx === i ? { ...v, ...patch } : v)))
@@ -62,7 +89,7 @@ export function ProductForm({
       return
     }
     setSaving(true)
-    const res = await action({ name, slug, description, metalType, isFeatured, isActive, variants })
+    const res = await action({ name, slug, description, metalType, isFeatured, isActive, variants, images })
     setSaving(false)
     if (res?.error) {
       setError(res.error)
@@ -165,6 +192,44 @@ export function ProductForm({
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Images */}
+      <div className="surface-card space-y-4 rounded-xl p-6">
+        <h2 className="font-headline text-lg text-foreground">Product Images</h2>
+        <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border p-6 text-sm text-muted-foreground hover:border-primary/40">
+          <span>{uploading ? 'Uploading…' : 'Click to upload images (max 8 MB each)'}</span>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => handleUpload(e.target.files)}
+            disabled={uploading}
+          />
+        </label>
+        {uploadError ? <p className="text-xs text-destructive">{uploadError}</p> : null}
+        {images.length > 0 ? (
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+            {images.map((path) => (
+              <div key={path} className="group relative aspect-square overflow-hidden rounded-lg border border-border">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/product-images/${path}`}
+                  alt="Product"
+                  className="h-full w-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeImage(path)}
+                  className="absolute right-1 top-1 rounded-full bg-destructive px-2 py-0.5 text-xs text-destructive-foreground opacity-0 transition-opacity group-hover:opacity-100"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : null}
       </div>
 
       <div className="flex gap-3">

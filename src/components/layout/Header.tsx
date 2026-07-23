@@ -52,12 +52,14 @@ const BrandMark = ({ className }: { className?: string }) => (
 
 function BrandLockup() {
   return (
-    <Link href="/" className="flex items-center gap-2.5">
-      <BrandMark className="h-9 w-9" />
-      <span className="font-headline text-xl font-semibold tracking-tight text-primary">
+    <Link href="/" className="flex items-center gap-2">
+      <BrandMark className="h-8 w-8 shrink-0" />
+      <span className="font-headline text-lg font-semibold tracking-tight text-primary sm:text-xl">
         Al-Wahab
       </span>
-      <span className="font-urdu text-2xl text-gold-shimmer">الوَہاب جیولرز</span>
+      <span className="font-urdu hidden text-xl text-gold-shimmer md:inline-block lg:text-2xl">
+        الوَہاب جیولرز
+      </span>
     </Link>
   )
 }
@@ -81,7 +83,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-      <div className="container flex h-16 items-center justify-between gap-4">
+      <div className="container flex h-16 items-center justify-between gap-3 overflow-visible">
         <BrandLockup />
 
         {/* Desktop nav */}

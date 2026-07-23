@@ -48,6 +48,20 @@ export async function createProductAction(values: ProductFormValues): Promise<{ 
   )
   if (variantError) return { error: variantError.message }
 
+  // Insert product images
+  if (values.images.length > 0) {
+    const { error: imageError } = await supabase.from('product_images').insert(
+      values.images.map((path, i) => ({
+        product_id: productId,
+        storage_path: path,
+        alt_text: values.name,
+        position: i,
+        is_primary: i === 0,
+      })),
+    )
+    if (imageError) return { error: imageError.message }
+  }
+
   revalidatePath('/admin/products')
   revalidatePath('/collections')
   return {}
@@ -92,6 +106,21 @@ export async function updateProductAction(
     })),
   )
   if (variantError) return { error: variantError.message }
+
+  // Replace images: delete + re-insert.
+  await supabase.from('product_images').delete().eq('product_id', id)
+  if (values.images.length > 0) {
+    const { error: imageError } = await supabase.from('product_images').insert(
+      values.images.map((path, i) => ({
+        product_id: id,
+        storage_path: path,
+        alt_text: values.name,
+        position: i,
+        is_primary: i === 0,
+      })),
+    )
+    if (imageError) return { error: imageError.message }
+  }
 
   revalidatePath('/admin/products')
   revalidatePath(`/collections/${values.slug}`)
