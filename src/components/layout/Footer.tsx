@@ -73,8 +73,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-border pt-6 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Al-Wahab Jewellers. {t('footer.rights')}
+        <div className="mt-10 flex flex-col items-center gap-2 border-t border-border pt-6 text-center text-xs text-muted-foreground">
+          <p>© {new Date().getFullYear()} Al-Wahab Jewellers. {t('footer.rights')}</p>
+          <Link href="/admin/login" className="text-muted-foreground/50 underline-offset-2 hover:text-primary hover:underline">
+            {t('admin.portal')}
+          </Link>
         </div>
       </Container>
     </footer>
