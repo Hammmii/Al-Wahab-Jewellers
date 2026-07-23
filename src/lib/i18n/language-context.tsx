@@ -34,19 +34,26 @@ export function LanguageProvider({
     }
   }, [])
 
-  // Reflect language on <html> + persist to both localStorage and a cookie
-  // (the cookie lets the SERVER render the right language on the next load).
+  // Reflect language on <html> + persist to both localStorage and a cookie.
+  // Adds a smooth fade transition when switching languages.
   useEffect(() => {
     const html = document.documentElement
-    html.lang = lang
-    html.dir = lang === 'ur' ? 'rtl' : 'ltr'
-    html.classList.toggle('lang-ur', lang === 'ur')
+    // Fade out
+    html.classList.add('lang-switching')
+    const applyTimer = setTimeout(() => {
+      html.lang = lang
+      html.dir = lang === 'ur' ? 'rtl' : 'ltr'
+      html.classList.toggle('lang-ur', lang === 'ur')
+      // Fade back in
+      requestAnimationFrame(() => html.classList.remove('lang-switching'))
+    }, 150)
     try {
       localStorage.setItem(STORAGE_KEY, lang)
     } catch {
       /* ignore */
     }
     document.cookie = `alwahab-lang=${lang};path=/;max-age=31536000;samesite=lax`
+    return () => clearTimeout(applyTimer)
   }, [lang])
 
   const setLang = useCallback((l: Lang) => setLangState(l), [])

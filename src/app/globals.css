@@ -113,6 +113,15 @@
     font-feature-settings: 'kern', 'liga', 'calt';
   }
 
+  /* Smooth language-switch transition: fade the whole page when lang changes */
+  html {
+    transition: opacity 0.3s ease;
+  }
+  html.lang-switching body {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
   /* Gold-tinted text selection */
   ::selection {
     background: hsl(var(--primary) / 0.28);
