@@ -57,6 +57,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { href: '/admin', labelKey: 'admin.dashboard' as const, iconKey: 'dashboard' as const },
     { href: '/admin/products', labelKey: 'admin.productsNav' as const, iconKey: 'products' as const },
     { href: '/admin/orders', labelKey: 'admin.ordersNav' as const, iconKey: 'orders' as const },
+    { href: '/admin/gold-rates', labelKey: 'admin.goldRatesNav' as const, iconKey: 'dashboard' as const },
   ]
 
   return <AdminShell nav={nav} email={user.email}>{children}</AdminShell>

@@ -276,6 +276,7 @@ export const translations = {
   'admin.dashboard': { en: 'Dashboard', ur: 'ڈیش بورڈ' },
   'admin.productsNav': { en: 'Products', ur: 'مصنوعات' },
   'admin.ordersNav': { en: 'Orders', ur: 'آرڈرز' },
+  'admin.goldRatesNav': { en: 'Gold Rates', ur: 'سونے کے ریٹ' },
   'admin.signOut': { en: 'Sign out', ur: 'سائن آؤٹ' },
   'admin.menu': { en: 'Menu', ur: 'مینو' },
   'admin.portal': { en: 'Admin', ur: 'ایڈمن' },
