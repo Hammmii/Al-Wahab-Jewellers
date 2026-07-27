@@ -6,6 +6,7 @@ import { Hero } from '@/components/home/hero'
 import { HeroActions } from '@/components/home/hero-actions'
 import { FeaturedProducts } from '@/components/home/featured-products'
 import { HeritageSection } from '@/components/home/heritage-content'
+import { Showcase } from '@/components/home/showcase'
 import { CategoryCard, type CategoryIconKey } from '@/components/home/category-card'
 import { CategoriesHeading } from '@/components/home/categories-copy'
 import {
@@ -61,6 +62,9 @@ export default function Home() {
       <Section>
         <HeritageSection />
       </Section>
+
+      {/* Cinematic showcase */}
+      <Showcase />
 
       {/* The promise */}
       <Section className="bg-card/30">

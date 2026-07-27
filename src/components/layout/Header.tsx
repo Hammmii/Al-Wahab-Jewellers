@@ -99,7 +99,7 @@ export function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-1.5">
-          <LanguageToggle className="hidden sm:inline-flex" />
+          <LanguageToggle className="inline-flex" />
           <Button
             asChild
             variant="ghost"
