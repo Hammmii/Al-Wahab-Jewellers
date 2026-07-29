@@ -87,12 +87,12 @@ export function GoldRateManager() {
             ))}
           </div>
         ) : (
-          <p className="mt-3 text-sm text-muted-foreground">No rates set yet. Enter today's rate below.</p>
+          <p className="mt-3 text-sm text-muted-foreground">No rates set yet. Enter today&apos;s rate below.</p>
         )}
       </div>
 
       <div className="surface-card rounded-xl p-6">
-        <h2 className="font-headline text-lg text-foreground">Set Today's Rate (per Tola, PKR)</h2>
+        <h2 className="font-headline text-lg text-foreground">Set Today&apos;s Rate (per Tola, PKR)</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           {KARATS.map((k) => (
             <label key={k} className="block">
@@ -110,7 +110,7 @@ export function GoldRateManager() {
           {saving ? 'Saving…' : 'Update Gold Rates'}
         </Button>
         <p className="mt-3 text-xs text-muted-foreground">
-          Enter the real rate from Multan's Sarafa Bazar. Per-10g and per-gram rates are auto-calculated.
+          Enter the real rate from Multan&apos;s Sarafa Bazar. Per-10g and per-gram rates are auto-calculated.
         </p>
       </div>
     </div>
