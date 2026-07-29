@@ -1,6 +1,7 @@
 # Al-Wahab Jewellers — Session Recap & Current State
 
 > Read this first at the start of every new session. It captures where the project stands, what was recently done, and what still needs attention.
+> **Branch:** `main` is the active production branch. `rebuild/premium-storefront` is stale and should be ignored/deleted.
 
 ---
 
@@ -16,51 +17,45 @@
 
 ---
 
-## What was done in this session
+## Current state (as of latest review)
 
-### Critical bug fixes
+- **Branch:** `main`
+- **Last reviewed commit:** `7059582` — fix: restore working lint script for Next.js 16
+- **Framework:** Next.js 16.2.11 + React 18 + TypeScript strict + Tailwind + shadcn/ui
+- **Deployment target:** Vercel (configured via `vercel.json` + Vercel MCP)
+- **Database:** Supabase project `awhbswhrqsmqwyzkcsyg`
+- **Gold rates:** Populated via admin gold-rate manager
 
-1. **Empty storefront fixed.** Product queries were using embedded selects (`variants(*), images(*)`) which fail when PostgREST's schema cache does not yet know the foreign-key relationships. Rewrote `src/lib/data/products.ts` and `src/lib/data/admin-products.ts` to fetch products, variants, and images in separate queries, then attach them in code. Added error logging so failures are no longer silent.
-2. **Gold-rates API crash fixed.** `/api/gold-rates` had `revalidate = 300` (static) but used `cookies()` via the Supabase client. Changed to `dynamic = 'force-dynamic'`.
-3. **Data-layer error logging added** in `products.ts`, `admin-products.ts`, `categories.ts`, `admin.ts`, and `gold-rates.ts`.
+---
 
-### Production-readiness work
+## What works today
 
-4. **Checkout hardening.**
-   - New migration `supabase/migrations/0003_checkout_hardening.sql`:
-     - Adds `payment_proof_path` to `orders`.
-     - Creates private `payment-proofs` storage bucket.
-     - Adds atomic `public.create_order()` Postgres function that locks variants, checks stock, decrements stock, and inserts the order + items with DB-authoritative prices and names.
-   - `src/lib/validations/index.ts`: order items now send only `productId`, `variantId`, `quantity`; added optional `paymentProofPath`.
-   - `src/app/api/orders/route.ts`: uses `create_order` RPC, returns structured errors, fetches order total/items with separate queries (no embedded selects).
-   - `src/app/checkout/page.tsx`: builds new payload, shows file input for bank-transfer proof, uploads proof before placing order, uses `useToast` for errors.
-   - `src/app/api/upload/payment-proof/route.ts`: multipart upload handler (service-role, so guests can use it).
-   - `src/app/admin/orders/[id]/page.tsx`: new admin order detail page with signed-url payment-proof viewer.
-   - `src/app/admin/orders/page.tsx`: links to detail page.
+### Public storefront
+- Homepage with hero, featured products, categories, heritage section, showcase, trust promises, CTAs.
+- Collections page with category filtering.
+- Product detail pages with variants, prices, images.
+- Bilingual English/Urdu with RTL support and visible mobile language toggle.
+- Real business info (Sikandar Hayat, phone, address) across footer, contact, and about pages.
+- SEO: dynamic product metadata, default OG/Twitter image, sitemap, robots.txt.
 
-5. **Search improvement.** `searchProducts` in `src/lib/data/products.ts` now uses the existing `tsvector` full-text index first, then falls back to trigram/fuzzy `ilike` on `name`.
+### Cart & checkout
+- Client-side Zustand cart persisted to `localStorage`.
+- Checkout with COD or bank transfer.
+- Bank-transfer payment-proof upload before order placement.
+- Server-authoritative order creation via `public.create_order()` RPC: locks variants, checks stock, decrements stock, inserts order/items with DB prices.
+- Structured error handling for insufficient stock / unavailable variants.
 
-6. **SEO improvements.**
-   - Default Open Graph / Twitter image in `src/app/layout.tsx`.
-   - Dynamic `generateMetadata` in `src/app/collections/[slug]/page.tsx` with product image.
+### Admin portal
+- Admin login via Supabase Auth.
+- Dashboard with stats.
+- Product CRUD with Supabase Storage image upload.
+- Orders list + order detail with payment-proof viewer.
+- Gold-rate manager to set daily Sarafa Bazar rates.
 
-7. **Virtual-try-on email.** Created `src/lib/email/templates/virtual-try-on.tsx`; route now emails the shop and (if provided) the customer. Email sending is optional — failures are logged, not blocking.
-
-8. **Build quality gates enforced.**
-   - Created `.eslintrc.json`.
-   - Installed `eslint@8.57.0` + `eslint-config-next@15.1.0`.
-   - Flipped `typescript.ignoreBuildErrors` and `eslint.ignoreDuringBuilds` to `false` in `next.config.ts`.
-
-9. **Real business info wired across the site.**
-   - `src/lib/site.ts`: added `phone`, `whatsapp`, `owner`.
-   - `src/lib/i18n/translations.ts`: updated about story and contact text.
-   - `src/components/contact/contact-sidebar.tsx`: clickable phone + WhatsApp links.
-   - `src/components/layout/Footer.tsx`: phone in footer.
-   - `src/components/about/about-content.tsx`: owner card with name, experience, phone.
-
-10. **Documentation.** Rewrote `README.md` with full setup instructions.
-
-11. **GitHub.** All changes committed and pushed to branch `rebuild/premium-storefront`.
+### Other
+- Custom design request wizard.
+- Virtual try-on quote requests with email notifications (optional).
+- Contact form.
 
 ---
 
@@ -68,53 +63,55 @@
 
 ```
 npm run typecheck  ✅
-npm run lint       ✅
+npm run lint       ✅ (eslint ., next lint removed in Next.js 16)
 npm run build      ✅
 ```
 
-A test server on port 9003 confirmed:
-- Homepage, collections, and product detail render the three seed products.
-- Contact page shows WhatsApp link.
-- About page shows Sikandar Hayat + 30+ years.
-- Custom design and virtual try-on pages render.
-- `/admin` redirects when not logged in (expected).
-
-The production server on port 9002 still needs to be restarted to pick up the new build.
-
----
-
-## Known issues / blockers
-
-1. **Supabase schema needs to be applied.** The fixed `_apply_all.sql` is ready but has not been run on the live project yet. Until it is applied, `create_order()` does not exist and checkout will fail.
-
-2. **Gold rates are empty.** The `current_gold_rates` view returns no rows until the admin enters manual rates in `/admin` or the auto-rates job is implemented.
-
-3. **No admin user exists yet.** After applying the SQL, create a Supabase Auth user and run:
-   ```sql
-   update public.profiles set is_admin = true where id = '<user-uuid>';
-   ```
-
-4. **Production server not restarted.** The existing `next start` on port 9002 is still running the old build.
+Smoke-tested on port 9003:
+- Homepage, collections, product detail render the three seed products.
+- Phone and owner name render in footer, contact, and about pages.
+- Gold-rates API returns real manual rates.
+- `/api/orders` returns `variant_not_found` for fake IDs (checkout hardening wired).
+- Admin routes redirect when unauthenticated.
+- Sitemap and robots.txt render correctly.
 
 ---
 
-## Immediate next steps (do these first)
+## Known issues / remaining gaps
 
-1. Run the entire contents of `supabase/_apply_all.sql` in the Supabase SQL Editor.
-2. Create a Supabase Auth user and run `update public.profiles set is_admin = true where id = '<user-uuid>';`.
-3. Restart the production server on port 9002.
+### Must fix before trusting as production
+1. **Search is not exposed to users.** `searchProducts()` was improved to use `tsvector` + `pg_trgm`, but the only search UI is a magnifying-glass icon in the header that links to `/collections`. There is no search input, results page, or live search.
+
+2. **No custom error pages.** Missing `src/app/not-found.tsx` and `src/app/error.tsx`.
+
+3. **Stale branch.** `rebuild/premium-storefront` is behind `main` and should be deleted to avoid confusion.
+
+### Should add soon
+4. **Reviews UI.** The `reviews` table and RLS policies exist, but customers cannot view or submit reviews.
+
+5. **Greeting-message generator.** Listed in `docs/blueprint.md` but never implemented.
+
+6. **Path-based category URLs.** Categories use `/collections?category=rings`; `/collections/rings` would be better for SEO and UX.
+
+7. **Security headers / CSP.** Not configured in `next.config.ts` or Vercel.
+
+8. **Automated tests.** No test suite exists (no Jest/Vitest/Playwright).
+
+9. **CI/CD.** No GitHub Actions workflow for `typecheck`, `lint`, `build`.
+
+### Nice to have
+10. **Performance/accessibility audit** (Lighthouse, gold-on-dark contrast, reduced-motion).
+11. **Analytics wiring** (Plausible optional env exists but not wired).
+12. **Migrate ESLint to flat config** (`eslint.config.mjs`) — current `.eslintrc.json` + eslint 8 works but is legacy for Next.js 16.
 
 ---
 
-## Longer-term backlog
+## Immediate next steps if something is broken
 
-- Greeting-message generator (from original `docs/blueprint.md`).
-- Real customer reviews UI (schema exists, UI does not).
-- Path-based category URLs (`/collections/rings`) instead of query strings.
-- Automated RLS tests (pgTAP / Supabase test helpers).
-- CI/CD GitHub Actions workflow for `typecheck`, `lint`, `build`.
-- Security headers / CSP.
-- Analytics (Plausible) wiring if desired.
+1. Verify `supabase/_apply_all.sql` has been run on the live Supabase project.
+2. Verify an admin user exists: `select * from public.profiles where is_admin = true;`
+3. Restart the production server to pick up the latest build.
+4. Run `npm run typecheck && npm run lint && npm run build` after any change.
 
 ---
 
@@ -126,3 +123,4 @@ The production server on port 9002 still needs to be restarted to pick up the ne
 - This file (`/.claude/memory/session-recap.md`).
 - `src/lib/site.ts` — current business facts.
 - `src/lib/validations/index.ts` — shared Zod schemas.
+- `supabase/_apply_all.sql` — single source-of-truth schema + seed.
