@@ -88,12 +88,19 @@ npm run start       # Start production server on port 9002
 
 ## Recent changes
 
+- Added working site-wide search in the header and on the collections page (full-text + trigram backed).
+- Added custom bilingual 404 (`not-found.tsx`) and error boundary (`error.tsx`) pages.
+- Cleaned up the stale `rebuild/premium-storefront` branch.
 - Hardened checkout with server-authoritative prices, stock checks, and atomic order creation via Postgres RPC.
 - Added bank-transfer payment-proof upload and admin order-detail viewer.
 - Improved product search to use existing full-text (`tsvector`) and trigram indexes.
 - Added SEO metadata and Open Graph images.
 - Added virtual-try-on email notifications.
 - Wired real business info: Sikandar Hayat, 30+ years, phone 0300 9631161.
+
+## Supabase one-shot setup
+
+If you see `ERROR: 42883: function public.is_admin() does not exist`, it means a policy was created before the helper function existed. Run the **entire** contents of `supabase/_apply_all.sql` in the Supabase SQL Editor as a single query. It creates a stub `is_admin()` first, then replaces it after tables exist, so policies compile safely.
 
 ## Project structure
 

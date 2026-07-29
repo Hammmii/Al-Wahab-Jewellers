@@ -23,19 +23,35 @@ export function CollectionsHeading() {
   )
 }
 
-export function CollectionsEmpty() {
+export function CollectionsEmpty({ searchQuery }: { searchQuery?: string }) {
   const t = useT()
   return (
     <EmptyState
       icon={<IconRing className="h-10 w-10" />}
-      title={t('collections.empty')}
-      description={t('collections.emptyDesc')}
+      title={searchQuery ? t('collections.noSearchResults') : t('collections.empty')}
+      description={searchQuery ? t('collections.noSearchResultsDesc') : t('collections.emptyDesc')}
       action={
         <Button asChild>
-          <Link href="/custom-design">{t('cta.startCustom')}</Link>
+          <Link href={searchQuery ? '/collections' : '/custom-design'}>
+            {searchQuery ? t('nav.collections') : t('cta.startCustom')}
+          </Link>
         </Button>
       }
     />
+  )
+}
+
+export function SearchResultsHeading({ query, count }: { query: string; count: number }) {
+  const t = useT()
+  return (
+    <div className="mt-6 text-center">
+      <p className="text-sm text-muted-foreground">
+        {t('collections.searchResults')} <span className="font-medium text-foreground">&ldquo;{query}&rdquo;</span>
+      </p>
+      <p className="mt-1 text-xs text-muted-foreground">
+        {count} {count === 1 ? 'piece' : 'pieces'} found
+      </p>
+    </div>
   )
 }
 

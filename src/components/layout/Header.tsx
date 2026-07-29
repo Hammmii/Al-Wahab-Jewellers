@@ -9,10 +9,10 @@ import { cn } from '@/lib/utils'
 import { useCartCount, useWishlistCount } from '@/lib/stores/use-hydrated-safe'
 import { useT } from '@/lib/i18n/language-context'
 import { LanguageToggle } from '@/components/i18n/language-toggle'
+import { SearchInput } from './search-input'
 import {
   IconCart,
   IconHeart,
-  IconSearch,
 } from '@/components/icons'
 
 // Local inline icons for menu open/close (kept minimal, on-brand line style).
@@ -100,16 +100,7 @@ export function Header() {
         {/* Actions */}
         <div className="flex items-center gap-1.5">
           <LanguageToggle className="inline-flex" />
-          <Button
-            asChild
-            variant="ghost"
-            size="icon"
-            className="relative text-muted-foreground hover:text-primary"
-          >
-            <Link href="/collections" aria-label="Search collections">
-              <IconSearch className="h-6 w-6" />
-            </Link>
-          </Button>
+          <SearchInput className="hidden sm:flex" />
 
           <Button
             asChild
@@ -167,6 +158,12 @@ export function Header() {
                     </Link>
                   ))}
                 </nav>
+                <div className="border-t border-border p-4">
+                  <SearchInput
+                    variant="mobile-menu"
+                    onNavigate={() => setOpen(false)}
+                  />
+                </div>
                 <div className="border-t border-border p-4">
                   <LanguageToggle className="w-full justify-center" />
                 </div>

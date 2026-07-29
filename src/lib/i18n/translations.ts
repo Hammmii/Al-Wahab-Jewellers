@@ -15,6 +15,7 @@ export const translations = {
   'nav.cart': { en: 'Cart', ur: 'کارٹ' },
   'nav.wishlist': { en: 'Wishlist', ur: 'پسندیدہ' },
   'nav.search': { en: 'Search', ur: 'تلاش' },
+  'nav.searchPlaceholder': { en: 'Search gold jewellery…', ur: 'سونے کا زیور تلاش کریں…' },
 
   // Hero / common actions
   'cta.explore': { en: 'Explore the Collection', ur: 'مجموعہ دیکھیں' },
@@ -59,12 +60,25 @@ export const translations = {
   'product.backToCollection': { en: 'Back to Collection', ur: 'مجموعے پر واپس' },
   'product.collection': { en: 'Collection', ur: 'مجموعہ' },
 
+  // Not found
+  'notFound.title': { en: 'Page not found', ur: 'صفحہ نہیں ملا' },
+  'notFound.description': { en: "We couldn't find the page you were looking for. It may have moved or no longer exists.", ur: 'آپ کا مطلوبہ صفحہ نہیں مل سکا۔ شاید یہ منتقل ہو گیا یا اب موجود نہیں۔' },
+  'notFound.browseCollection': { en: 'Browse the collection', ur: 'مجموعہ دیکھیں' },
+
+  // Error
+  'error.title': { en: 'Something went wrong', ur: 'کچھ غلط ہو گیا' },
+  'error.description': { en: 'We encountered an unexpected issue. Please try again, or return home.', ur: 'ایک غیر متوقع مسئلہ پیش آیا۔ براہ کرم دوبارہ کوشش کریں یا صفحہ اول پر جائیں۔' },
+  'error.retry': { en: 'Try again', ur: 'دوبارہ کوشش کریں' },
+
   // Collections
   'collections.title': { en: 'Our Jewellery', ur: 'ہمارا زیور' },
   'collections.subtitle': { en: 'Browse our gold. Each piece is hallmarked, hand finished, and ready to be inherited.', ur: 'ہمارا سونا دیکھیں۔ ہر شے خالص اور ہاتھ سے بنی ہے۔' },
   'collections.all': { en: 'All', ur: 'تمام' },
   'collections.empty': { en: 'No pieces here yet', ur: 'ابھی کوئی شے نہیں' },
   'collections.emptyDesc': { en: "We are adding to this collection soon. Visit our showroom, or commission a custom piece.", ur: 'ہم جلد یہاں اشیاء شامل کریں گے۔' },
+  'collections.searchResults': { en: 'Search results for', ur: 'تلاش کے نتائج برائے' },
+  'collections.noSearchResults': { en: 'No pieces match your search', ur: 'آپ کی تلاش سے کوئی شے نہیں ملی' },
+  'collections.noSearchResultsDesc': { en: 'Try a different keyword, or browse the full collection.', ur: 'کوئی اور لفظ آزمائیں، یا پورا مجموعہ دیکھیں۔' },
 
   // Cart / checkout
   'cart.title': { en: 'Shopping Cart', ur: 'خریداری کی ٹوکری' },

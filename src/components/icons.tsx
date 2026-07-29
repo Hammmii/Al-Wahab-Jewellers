@@ -192,3 +192,10 @@ export const IconPurity = (p: IconProps) => (
     <path d="M12 7.5 L12 16.5 M9 12 L15 12" />
   </Icon>
 )
+
+export const IconAlertTriangle = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M12 3 L21.5 19.5 H2.5 Z" />
+    <path d="M12 8.5 V13.5 M12 15.5 L12 15.6" />
+  </Icon>
+)
