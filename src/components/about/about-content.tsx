@@ -4,6 +4,7 @@ import { Container, Section, SectionHeading } from '@/components/common'
 import { Reveal } from '@/components/motion/reveal'
 import { useT } from '@/lib/i18n/language-context'
 import { siteConfig } from '@/lib/site'
+import { digitsOnly, formatPhoneDisplay } from '@/lib/format'
 import { IconCertificate, IconPurity, IconGift, IconLocation } from '@/components/icons'
 
 export function AboutHero() {
@@ -37,11 +38,16 @@ export function AboutStory() {
               <p className="text-sm text-muted-foreground">Led by</p>
               <p className="font-headline text-lg text-foreground">{siteConfig.owner.name}</p>
               <p className="text-sm text-muted-foreground">{siteConfig.owner.experience} in gold jewellery</p>
-              <p className="mt-2 text-sm">
-                <a href={`tel:+92${siteConfig.phone.slice(1)}`} className="text-primary hover:underline">
-                  {siteConfig.phone.replace(/(\d{4})(\d{3})(\d{4})/, '$1 $2 $3')}
-                </a>
-              </p>
+              <div className="mt-3 space-y-1">
+                {siteConfig.contacts.map((contact) => (
+                  <p key={contact.phone} className="text-sm">
+                    <a href={`tel:+${digitsOnly(contact.phone)}`} className="text-primary hover:underline">
+                      {formatPhoneDisplay(contact.phone)}
+                    </a>
+                    <span className="ml-1 text-xs text-muted-foreground">{contact.name}</span>
+                  </p>
+                ))}
+              </div>
             </div>
           </div>
         </Reveal>

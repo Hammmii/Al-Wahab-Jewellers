@@ -33,7 +33,12 @@
    - Added Category and Collection selects to the product form (`/admin/products/new` and `/admin/products/[id]`).
    - Updated admin shell navigation and dashboard card links to include the new pages.
 
-6. **Documentation**
+6. **Contact persons**
+   - Added Abdullah Sikandar (`+92 304 9316562`) and Abdul Wahab (`+92 300 0835875`) to `siteConfig.contacts`.
+   - Displayed all contacts on the Contact page, About page, and Footer.
+   - Added `digitsOnly` and `formatPhoneDisplay` helpers in `src/lib/format.ts`.
+
+7. **Documentation**
    - Updated `README.md` with recent changes and a note about the `public.is_admin()` SQL error.
 
 ## Verified in this session
@@ -112,8 +117,9 @@ The following items still deserve attention before calling the app "complete":
 
 ## Business facts (confirmed this session)
 
-- Phone / WhatsApp: `03009631161`
-- Owner: `Sikandar Hayat`
+- Owner: `Sikandar Hayat` — `03009631161`
+- `Abdullah Sikandar` — `+92 304 9316562`
+- `Abdul Wahab` — `+92 300 0835875`
 - Experience: 30+ years in gold jewellery
 - Location: Multan Sarafa Bazar, Shop #2, Pakistan
 - No bank account details needed for now.

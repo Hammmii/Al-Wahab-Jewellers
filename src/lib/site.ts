@@ -20,6 +20,11 @@ export const siteConfig = {
     name: 'Sikandar Hayat',
     experience: '30+ years',
   },
+  contacts: [
+    { name: 'Sikandar Hayat', phone: '03009631161', role: 'Owner' },
+    { name: 'Abdullah Sikandar', phone: '+92 304 9316562', role: 'Sales' },
+    { name: 'Abdul Wahab', phone: '+92 300 0835875', role: 'Sales' },
+  ],
   keywords: [
     'gold jewellers Multan',
     'Sarafa Bazar gold',

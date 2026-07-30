@@ -2,6 +2,7 @@
 
 import { useT } from '@/lib/i18n/language-context'
 import { siteConfig } from '@/lib/site'
+import { digitsOnly, formatPhoneDisplay } from '@/lib/format'
 
 export function ContactHeading() {
   const t = useT()
@@ -16,8 +17,6 @@ export function ContactHeading() {
 
 export function ContactSidebar() {
   const t = useT()
-  const phone = siteConfig.phone
-  const phoneDisplay = phone.replace(/(\d{4})(\d{3})(\d{4})/, '$1 $2 $3')
   return (
     <div className="space-y-6">
       <div className="surface-card flex items-start gap-4 rounded-xl p-6">
@@ -34,19 +33,27 @@ export function ContactSidebar() {
 
       <div className="surface-card rounded-xl p-6 text-sm text-muted-foreground">
         <h3 className="font-headline text-lg text-foreground">{t('contact.reachUs')}</h3>
-        <p className="mt-2">
-          Call or WhatsApp:{' '}
+        <ul className="mt-3 space-y-3">
+          {siteConfig.contacts.map((contact) => {
+            const digits = digitsOnly(contact.phone)
+            return (
+              <li key={contact.phone} className="flex flex-col">
+                <span className="text-foreground">{contact.name}</span>
+                <span className="text-xs text-muted-foreground/80">{contact.role}</span>
+                <a
+                  href={`tel:+${digits}`}
+                  dir="ltr"
+                  className="font-medium text-primary hover:underline"
+                >
+                  {formatPhoneDisplay(contact.phone)}
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+        <p className="mt-4">
           <a
-            href={`tel:+92${phone.slice(1)}`}
-            dir="ltr"
-            className="font-medium text-primary hover:underline"
-          >
-            {phoneDisplay}
-          </a>
-        </p>
-        <p className="mt-2">
-          <a
-            href={`https://wa.me/92300${phone.slice(4)}`}
+            href={`https://wa.me/923009631161`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:underline"

@@ -31,3 +31,20 @@ export function formatDate(date: string | Date): string {
     year: 'numeric',
   }).format(new Date(date))
 }
+
+/** Strip non-digits from a phone number for tel:/wa.me: links. */
+export function digitsOnly(phone: string): string {
+  return phone.replace(/\D/g, '')
+}
+
+/** Format a Pakistani phone number for display, e.g. "0300 9631161". */
+export function formatPhoneDisplay(phone: string): string {
+  const digits = digitsOnly(phone)
+  if (digits.length === 11 && digits.startsWith('0')) {
+    return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`
+  }
+  if (digits.length === 12 && digits.startsWith('92')) {
+    return `+${digits.slice(0, 2)} ${digits.slice(2, 5)} ${digits.slice(5, 8)} ${digits.slice(8)}`
+  }
+  return phone
+}

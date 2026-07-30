@@ -5,6 +5,7 @@ import { Container } from '@/components/common'
 import { IconLocation } from '@/components/icons'
 import { useT } from '@/lib/i18n/language-context'
 import { siteConfig } from '@/lib/site'
+import { digitsOnly, formatPhoneDisplay } from '@/lib/format'
 import type { TKey } from '@/lib/i18n/translations'
 
 const NAV: { href: string; labelKey: TKey }[] = [
@@ -18,8 +19,6 @@ const NAV: { href: string; labelKey: TKey }[] = [
 
 export function Footer() {
   const t = useT()
-  const phone = siteConfig.phone
-  const phoneDisplay = phone.replace(/(\d{4})(\d{3})(\d{4})/, '$1 $2 $3')
 
   return (
     <footer className="border-t border-border bg-card/40">
@@ -59,11 +58,16 @@ export function Footer() {
               <div>
                 <p>{siteConfig.address.street}</p>
                 <p>{siteConfig.address.city}, {siteConfig.address.country}</p>
-                <p className="mt-2">
-                  <a href={`tel:+92${phone.slice(1)}`} dir="ltr" className="text-primary hover:underline">
-                    {phoneDisplay}
-                  </a>
-                </p>
+                <div className="mt-2 space-y-1">
+                  {siteConfig.contacts.slice(0, 2).map((contact) => (
+                    <p key={contact.phone}>
+                      <a href={`tel:+${digitsOnly(contact.phone)}`} dir="ltr" className="text-primary hover:underline">
+                        {formatPhoneDisplay(contact.phone)}
+                      </a>
+                      <span className="ml-1 text-xs text-muted-foreground/70">({contact.name})</span>
+                    </p>
+                  ))}
+                </div>
               </div>
             </div>
             <p className="mt-4 text-xs text-muted-foreground/70">
