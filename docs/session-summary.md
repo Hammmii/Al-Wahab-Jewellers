@@ -21,7 +21,11 @@
 3. **Repository hygiene**
    - Deleted the stale `rebuild/premium-storefront` branch (local + remote).
 
-4. **Documentation**
+4. **Critical checkout bug fix**
+   - Found that `/api/orders` passed camelCase item keys (`variantId`, `productId`) to the Postgres `create_order()` RPC, which expects snake_case (`variant_id`, `product_id`).
+   - Fixed in `src/app/api/orders/route.ts` by mapping items to snake_case before the RPC call.
+
+5. **Documentation**
    - Updated `README.md` with recent changes and a note about the `public.is_admin()` SQL error.
 
 ## Verified in this session
@@ -34,6 +38,20 @@
   - `/collections?search=Ring` returns rings.
   - `/collections?search=xyznonexistent` shows "No pieces match your search".
   - `/this-page-does-not-exist` renders the custom 404 page.
+- End-to-end checkout audit (local test server):
+  - COD order: created successfully, stock decremented, order_items inserted.
+  - Bank-transfer order: created successfully with `payment_proof_path`.
+  - Insufficient-stock, invalid phone, and empty-cart cases return proper 400 errors.
+- Form audits:
+  - `/api/contact` persists to `contact_submissions`.
+  - `/api/custom-design` persists to `custom_design_requests`.
+  - `/api/virtual-try-on` returns success (persistence intentionally no-op until feature rebuild).
+  - `/api/upload/payment-proof` uploads to Supabase Storage `payment-proofs` bucket.
+- Admin route audit:
+  - `/admin/orders` redirects to `/admin/login` when unauthenticated.
+  - `/admin/login` renders the real sign-in form (Supabase Auth) when configured.
+  - Existing admin user: Sikandar Hayat (`c97f3e22-a136-4b4a-9af9-188368b3f07a`).
+- Audit test data was cleaned up and stock levels restored after testing.
 
 ## Known issue resolved
 

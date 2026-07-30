@@ -40,12 +40,19 @@ export async function POST(request: NextRequest) {
   } = await serverClient.auth.getUser()
   const customerId = user?.id ?? null
 
+  // The Postgres function expects snake_case keys inside the items JSONB.
+  const rpcItems = data.items.map((item) => ({
+    product_id: item.productId,
+    variant_id: item.variantId,
+    quantity: item.quantity,
+  })) as unknown as Json
+
   const { data: orderId, error: rpcError } = await adminClient.rpc('create_order', {
     p_payment_method: data.paymentMethod,
     p_customer_name: data.customerName,
     p_phone: data.phone,
     p_address: data.address as Json,
-    p_items: data.items as unknown as Json,
+    p_items: rpcItems,
     p_customer_id: customerId,
     p_email: data.email || null,
     p_notes: data.notes ?? null,
