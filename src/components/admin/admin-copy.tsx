@@ -132,3 +132,51 @@ export function OrdersEmpty() {
     </div>
   )
 }
+
+// ── Custom design requests ─────────────────────────────────
+export function CustomDesignsHeading({ count }: { count: number }) {
+  const t = useT()
+  return (
+    <div>
+      <h1 className="font-headline text-3xl text-foreground">{t('admin.customRequests')}</h1>
+      <p className="mt-1 text-sm text-muted-foreground">{count} {t('admin.newBespoke')}</p>
+    </div>
+  )
+}
+
+export function CustomDesignsEmpty() {
+  const t = useT()
+  return (
+    <div className="mt-8">
+      <EmptyState
+        icon={<IconGift className="h-10 w-10" />}
+        title={t('admin.customRequests')}
+        description="No bespoke enquiries yet."
+      />
+    </div>
+  )
+}
+
+// ── Contact messages ───────────────────────────────────────
+export function MessagesHeading({ count }: { count: number }) {
+  const t = useT()
+  return (
+    <div>
+      <h1 className="font-headline text-3xl text-foreground">{t('admin.messages')}</h1>
+      <p className="mt-1 text-sm text-muted-foreground">{count} {t('admin.newContacts')}</p>
+    </div>
+  )
+}
+
+export function MessagesEmpty() {
+  const t = useT()
+  return (
+    <div className="mt-8">
+      <EmptyState
+        icon={<IconCertificate className="h-10 w-10" />}
+        title={t('admin.messages')}
+        description="No contact messages yet."
+      />
+    </div>
+  )
+}

@@ -5,17 +5,19 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
-import { IconCertificate, IconRing, IconLocation } from '@/components/icons'
+import { IconCertificate, IconRing, IconLocation, IconGift } from '@/components/icons'
 import { useT } from '@/lib/i18n/language-context'
 import type { TKey } from '@/lib/i18n/translations'
 
 /** Serializable icon key (safe to pass across the server→client boundary). */
-export type AdminIconKey = 'dashboard' | 'products' | 'orders'
+export type AdminIconKey = 'dashboard' | 'products' | 'orders' | 'gift' | 'certificate'
 
 const ICONS: Record<AdminIconKey, ComponentType<{ className?: string }>> = {
   dashboard: IconCertificate,
   products: IconRing,
   orders: IconLocation,
+  gift: IconGift,
+  certificate: IconCertificate,
 }
 
 interface NavItem {

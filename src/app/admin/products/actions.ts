@@ -27,6 +27,8 @@ export async function createProductAction(values: ProductFormValues): Promise<{ 
       slug: values.slug,
       description: values.description || null,
       metal_type: values.metalType || null,
+      category_id: values.categoryId || null,
+      collection_id: values.collectionId || null,
       is_featured: values.isFeatured,
       is_active: values.isActive,
     })
@@ -86,6 +88,8 @@ export async function updateProductAction(
       slug: values.slug,
       description: values.description || null,
       metal_type: values.metalType || null,
+      category_id: values.categoryId || null,
+      collection_id: values.collectionId || null,
       is_featured: values.isFeatured,
       is_active: values.isActive,
     })
@@ -124,6 +128,25 @@ export async function updateProductAction(
 
   revalidatePath('/admin/products')
   revalidatePath(`/collections/${values.slug}`)
+  revalidatePath('/collections')
+  return {}
+}
+
+export async function deleteProductAction(id: string, slug: string): Promise<{ error?: string }> {
+  let supabase
+  try {
+    supabase = await requireAdmin()
+  } catch {
+    return { error: 'Not authorized.' }
+  }
+  if (!supabase) return { error: 'Database not configured.' }
+
+  // Images and variants are deleted via ON DELETE CASCADE.
+  const { error } = await supabase.from('products').delete().eq('id', id)
+  if (error) return { error: error.message }
+
+  revalidatePath('/admin/products')
+  revalidatePath(`/collections/${slug}`)
   revalidatePath('/collections')
   return {}
 }

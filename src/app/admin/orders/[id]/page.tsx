@@ -7,6 +7,7 @@ import { isSupabaseConfigured } from '@/lib/supabase/configured'
 import { formatPKR, formatDate } from '@/lib/format'
 import { EmptyState } from '@/components/common'
 import { IconLocation } from '@/components/icons'
+import { OrderStatusForm } from '@/components/admin/order-status-form'
 
 interface OrderItemRow {
   id: string
@@ -163,6 +164,17 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
           </div>
 
           <div className="surface-card rounded-xl p-6">
+            <h2 className="font-headline text-xl text-foreground">Update status</h2>
+            <div className="mt-4">
+              <OrderStatusForm
+                orderId={order.id}
+                currentStatus={order.status}
+                currentPaymentStatus={order.payment_status}
+              />
+            </div>
+          </div>
+
+          <div className="surface-card rounded-xl p-6">
             <h2 className="font-headline text-xl text-foreground">Payment</h2>
             <dl className="mt-4 space-y-2 text-sm">
               <div>
@@ -170,14 +182,6 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
                 <dd className="text-foreground">
                   {order.payment_method === 'cod' ? 'Cash on Delivery' : 'Bank Transfer'}
                 </dd>
-              </div>
-              <div>
-                <dt className="text-muted-foreground">Status</dt>
-                <dd className="capitalize text-foreground">{order.payment_status}</dd>
-              </div>
-              <div>
-                <dt className="text-muted-foreground">Order status</dt>
-                <dd className="capitalize text-foreground">{order.status}</dd>
               </div>
               {order.payment_method === 'bank_transfer' && (
                 <div>

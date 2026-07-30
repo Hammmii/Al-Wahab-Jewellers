@@ -23,24 +23,42 @@ export interface ProductFormValues {
   slug: string
   description: string
   metalType: string
+  categoryId: string
+  collectionId: string
   isFeatured: boolean
   isActive: boolean
   variants: VariantInput[]
   images: string[] // storage paths
 }
 
+interface CategoryOption {
+  id: string
+  name: string
+}
+
+interface CollectionOption {
+  id: string
+  name: string
+}
+
 export function ProductForm({
   initial,
   action,
+  categories = [],
+  collections = [],
 }: {
   initial?: Partial<ProductFormValues>
   action: (values: ProductFormValues) => Promise<{ error?: string } | void>
+  categories?: CategoryOption[]
+  collections?: CollectionOption[]
 }) {
   const router = useRouter()
   const [name, setName] = useState(initial?.name ?? '')
   const [slug, setSlug] = useState(initial?.slug ?? '')
   const [description, setDescription] = useState(initial?.description ?? '')
   const [metalType, setMetalType] = useState(initial?.metalType ?? '')
+  const [categoryId, setCategoryId] = useState(initial?.categoryId ?? '')
+  const [collectionId, setCollectionId] = useState(initial?.collectionId ?? '')
   const [isFeatured, setIsFeatured] = useState(initial?.isFeatured ?? false)
   const [isActive, setIsActive] = useState(initial?.isActive ?? true)
   const [variants, setVariants] = useState<VariantInput[]>(
@@ -89,7 +107,7 @@ export function ProductForm({
       return
     }
     setSaving(true)
-    const res = await action({ name, slug, description, metalType, isFeatured, isActive, variants, images })
+    const res = await action({ name, slug, description, metalType, categoryId, collectionId, isFeatured, isActive, variants, images })
     setSaving(false)
     if (res?.error) {
       setError(res.error)
@@ -134,6 +152,34 @@ export function ProductForm({
             placeholder="e.g. Yellow Gold, White Gold, Rose Gold"
           />
         </label>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="block">
+            <span className="mb-1.5 block text-sm font-medium text-foreground">Category</span>
+            <select
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+            >
+              <option value="">None</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </label>
+          <label className="block">
+            <span className="mb-1.5 block text-sm font-medium text-foreground">Collection</span>
+            <select
+              value={collectionId}
+              onChange={(e) => setCollectionId(e.target.value)}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+            >
+              <option value="">None</option>
+              {collections.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </label>
+        </div>
         <label className="block">
           <span className="mb-1.5 block text-sm font-medium text-foreground">Description</span>
           <Textarea rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />

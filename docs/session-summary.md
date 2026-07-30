@@ -25,7 +25,15 @@
    - Found that `/api/orders` passed camelCase item keys (`variantId`, `productId`) to the Postgres `create_order()` RPC, which expects snake_case (`variant_id`, `product_id`).
    - Fixed in `src/app/api/orders/route.ts` by mapping items to snake_case before the RPC call.
 
-5. **Documentation**
+5. **Admin fixes**
+   - Added `/admin/custom-designs` page to list bespoke enquiries.
+   - Added `/admin/messages` page to list contact submissions.
+   - Added order status + payment status update UI on `/admin/orders/[id]`.
+   - Added product delete action + button on `/admin/products`.
+   - Added Category and Collection selects to the product form (`/admin/products/new` and `/admin/products/[id]`).
+   - Updated admin shell navigation and dashboard card links to include the new pages.
+
+6. **Documentation**
    - Updated `README.md` with recent changes and a note about the `public.is_admin()` SQL error.
 
 ## Verified in this session

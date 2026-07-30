@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { adminGetProductRows } from '@/lib/data/admin-products'
 import { formatPKR } from '@/lib/format'
 import { ProductsHeading, ProductsEmpty, ProductsTableHead, ProductStatus, EditText } from '@/components/admin/admin-copy'
+import { DeleteProductButton } from '@/components/admin/delete-product-button'
 
 export default async function AdminProductsPage() {
   const rows = await adminGetProductRows()
@@ -40,11 +41,14 @@ export default async function AdminProductsPage() {
                     <ProductStatus isActive={row.isActive} isFeatured={row.isFeatured} />
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <Button asChild variant="ghost" size="sm">
-                      <Link href={`/admin/products/${row.id}`}>
-                        <EditText />
-                      </Link>
-                    </Button>
+                    <div className="flex items-center justify-end gap-1">
+                      <Button asChild variant="ghost" size="sm">
+                        <Link href={`/admin/products/${row.id}`}>
+                          <EditText />
+                        </Link>
+                      </Button>
+                      <DeleteProductButton id={row.id} slug={row.slug} name={row.name} />
+                    </div>
                   </td>
                 </tr>
               ))}

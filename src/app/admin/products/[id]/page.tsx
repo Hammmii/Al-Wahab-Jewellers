@@ -2,10 +2,15 @@ import { notFound } from 'next/navigation'
 import { ProductForm, type ProductFormValues } from '@/components/admin/product-form'
 import { updateProductAction } from '../actions'
 import { adminGetProduct } from '@/lib/data/admin-products'
+import { getCategories, getCollections } from '@/lib/data/categories'
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const product = await adminGetProduct(id)
+  const [product, categories, collections] = await Promise.all([
+    adminGetProduct(id),
+    getCategories(),
+    getCollections(),
+  ])
   if (!product) return notFound()
 
   const initial: Partial<ProductFormValues> = {
@@ -13,6 +18,8 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     slug: product.slug,
     description: product.description ?? '',
     metalType: product.metalType ?? '',
+    categoryId: product.categoryId ?? '',
+    collectionId: product.collectionId ?? '',
     isFeatured: product.isFeatured,
     isActive: product.isActive,
     variants: product.variants.map((v) => ({
@@ -22,6 +29,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
       price: v.price,
       stock: v.stock,
     })),
+    images: product.images.map((i) => i.storagePath),
   }
 
   return (
@@ -29,7 +37,12 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
       <h1 className="font-headline text-3xl text-foreground">Edit product</h1>
       <p className="mt-1 text-sm text-muted-foreground">{product.name}</p>
       <div className="mt-6">
-        <ProductForm initial={initial} action={(values) => updateProductAction(id, values)} />
+        <ProductForm
+          initial={initial}
+          action={(values) => updateProductAction(id, values)}
+          categories={categories}
+          collections={collections}
+        />
       </div>
     </div>
   )
