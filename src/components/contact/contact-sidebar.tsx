@@ -2,7 +2,7 @@
 
 import { useT } from '@/lib/i18n/language-context'
 import { siteConfig } from '@/lib/site'
-import { digitsOnly, formatPhoneDisplay } from '@/lib/format'
+import { phoneE164, formatPhoneDisplay } from '@/lib/format'
 
 export function ContactHeading() {
   const t = useT()
@@ -34,25 +34,22 @@ export function ContactSidebar() {
       <div className="surface-card rounded-xl p-6 text-sm text-muted-foreground">
         <h3 className="font-headline text-lg text-foreground">{t('contact.reachUs')}</h3>
         <ul className="mt-3 space-y-3">
-          {siteConfig.contacts.map((contact) => {
-            const digits = digitsOnly(contact.phone)
-            return (
-              <li key={contact.phone} className="flex items-center justify-between gap-3">
-                <span className="text-foreground">{contact.name}</span>
-                <a
-                  href={`tel:+${digits}`}
-                  dir="ltr"
-                  className="font-medium text-primary hover:underline"
-                >
-                  {formatPhoneDisplay(contact.phone)}
-                </a>
-              </li>
-            )
-          })}
+          {siteConfig.contacts.map((contact) => (
+            <li key={contact.phone} className="flex items-center justify-between gap-3">
+              <span className="text-foreground">{contact.name}</span>
+              <a
+                href={`tel:${phoneE164(contact.phone)}`}
+                dir="ltr"
+                className="font-medium text-primary hover:underline"
+              >
+                {formatPhoneDisplay(contact.phone)}
+              </a>
+            </li>
+          ))}
         </ul>
         <p className="mt-4">
           <a
-            href={`https://wa.me/923009631161`}
+            href={`https://wa.me/${phoneE164(siteConfig.whatsapp).replace('+', '')}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:underline"

@@ -32,12 +32,28 @@ export function formatDate(date: string | Date): string {
   }).format(new Date(date))
 }
 
-/** Strip non-digits from a phone number for tel:/wa.me: links. */
+/** Strip non-digits from a phone number. */
 export function digitsOnly(phone: string): string {
   return phone.replace(/\D/g, '')
 }
 
-/** Format a Pakistani phone number for display, e.g. "0300 9631161". */
+/**
+ * Convert a Pakistani phone number to E.164 for tel:/wa.me: links.
+ * - 11-digit local (03xx xxx xxxx) → +923xx xxx xxxx
+ * - Already international (+92...) → preserved
+ */
+export function phoneE164(phone: string): string {
+  const digits = digitsOnly(phone)
+  if (digits.length === 11 && digits.startsWith('0')) {
+    return `+92${digits.slice(1)}`
+  }
+  if (digits.length === 12 && digits.startsWith('92')) {
+    return `+${digits}`
+  }
+  return phone
+}
+
+/** Format a Pakistani phone number for display, preserving the style it was stored in. */
 export function formatPhoneDisplay(phone: string): string {
   const digits = digitsOnly(phone)
   if (digits.length === 11 && digits.startsWith('0')) {

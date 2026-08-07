@@ -4,7 +4,7 @@ import { Container, Section, SectionHeading } from '@/components/common'
 import { Reveal } from '@/components/motion/reveal'
 import { useT } from '@/lib/i18n/language-context'
 import { siteConfig } from '@/lib/site'
-import { digitsOnly, formatPhoneDisplay } from '@/lib/format'
+import { phoneE164, formatPhoneDisplay } from '@/lib/format'
 import { IconCertificate, IconPurity, IconGift, IconLocation } from '@/components/icons'
 
 export function AboutHero() {
@@ -42,7 +42,7 @@ export function AboutStory() {
                 {siteConfig.contacts.map((contact) => (
                   <div key={contact.phone} className="flex items-center justify-between gap-3 text-sm">
                     <span className="text-muted-foreground">{contact.name}</span>
-                    <a href={`tel:+${digitsOnly(contact.phone)}`} className="text-primary hover:underline">
+                    <a href={`tel:${phoneE164(contact.phone)}`} className="text-primary hover:underline">
                       {formatPhoneDisplay(contact.phone)}
                     </a>
                   </div>

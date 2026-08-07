@@ -5,7 +5,7 @@ import { Container } from '@/components/common'
 import { IconLocation } from '@/components/icons'
 import { useT } from '@/lib/i18n/language-context'
 import { siteConfig } from '@/lib/site'
-import { digitsOnly, formatPhoneDisplay } from '@/lib/format'
+import { phoneE164, formatPhoneDisplay } from '@/lib/format'
 import type { TKey } from '@/lib/i18n/translations'
 
 const NAV: { href: string; labelKey: TKey }[] = [
@@ -62,7 +62,7 @@ export function Footer() {
                   {siteConfig.contacts.map((contact) => (
                     <p key={contact.phone} className="flex items-center justify-between gap-3">
                       <span className="text-muted-foreground">{contact.name}</span>
-                      <a href={`tel:+${digitsOnly(contact.phone)}`} dir="ltr" className="text-primary hover:underline">
+                      <a href={`tel:${phoneE164(contact.phone)}`} dir="ltr" className="text-primary hover:underline">
                         {formatPhoneDisplay(contact.phone)}
                       </a>
                     </p>
