@@ -1,126 +1,102 @@
 # Session summary — Al-Wahab Jewellers
 
-> Last updated: 2026-07-22
-> Current branch: `main`
-> Last commit before this session: `6519f85`
+> Last updated: 2026-08-07  
+> Current branch: `main`  
+> Status after this session: **build, typecheck, lint, and end-to-end checkout test are green.**
 
 ## What was done in this session
 
-1. **Working search UI**
-   - Added `src/components/layout/search-input.tsx` — expandable desktop input + mobile variant.
-   - Wired search into `src/components/layout/Header.tsx`.
-   - Updated `src/app/collections/page.tsx` to read `?search=` and call `searchProducts()`.
-   - Added search-specific empty state and results heading in `src/components/collections/collections-copy.tsx`.
-   - Added bilingual translation keys in `src/lib/i18n/translations.ts`.
+1. **Fixed the invisible homepage hero headline**
+   - Root cause: the `<GoldParticles>` canvas sat at `z-20`, covering the hero content at `z-10`.
+   - Updated `src/components/home/hero.tsx` to restore the original `Reveal` + `GoldParticles` layout and raised the content container to `z-30`.
+   - Added `isolate` to the hero section for a clean stacking context.
+   - Removed temporary debug scaffolding (`TEST VISIBLE` red box).
 
-2. **Custom error surfaces**
-   - Created `src/app/not-found.tsx` — bilingual branded 404 with links to `/collections` and `/`.
-   - Created `src/app/error.tsx` — Next.js error boundary, bilingual, with `reset()` and home links.
-   - Added `IconAlertTriangle` to `src/components/icons.tsx`.
+2. **Visual UI audit across key pages**
+   - Captured full-page screenshots of `/`, `/collections`, `/collections/eternal-flame-ring`, `/contact`, `/about`, `/cart`, `/checkout`, and `/admin/login` using a headless browser.
+   - Verified the homepage renders hero, featured products, category cards, heritage, showcase, trust section, CTA, and showroom blocks correctly.
+   - Verified collections and product detail pages render real seeded products with prices and variants.
+   - Verified contact/about sidebars show all business contacts with no fabricated roles.
 
-3. **Repository hygiene**
-   - Deleted the stale `rebuild/premium-storefront` branch (local + remote).
+3. **Fixed the checkout form validation bug**
+   - `src/app/checkout/page.tsx` was validating the form against the full `orderSchema`, which requires `items` — but the form only collects customer/payment details.
+   - Added a local `checkoutFormSchema` that omits `items`, so the resolver matches the actual form fields. The cart items are merged in before the API call as before.
+   - Ran an end-to-end Playwright test: add → cart → checkout → place COD order → redirect to `/checkout/success`. Result: **passed (HTTP 201 + success redirect).**
 
-4. **Critical checkout bug fix**
-   - Found that `/api/orders` passed camelCase item keys (`variantId`, `productId`) to the Postgres `create_order()` RPC, which expects snake_case (`variant_id`, `product_id`).
-   - Fixed in `src/app/api/orders/route.ts` by mapping items to snake_case before the RPC call.
+4. **Completed the contact list everywhere**
+   - `src/lib/site.ts` already contained `Sikandar Hayat`, `Abdul Wahab`, and `Abdullah Sikandar`.
+   - Updated `src/components/layout/Footer.tsx` to render **all** contacts instead of slicing to the first two.
+   - Names are kept plain (no role labels) and `Abdul Wahab` appears above `Abdullah Sikandar`.
 
-5. **Admin fixes**
-   - Added `/admin/custom-designs` page to list bespoke enquiries.
-   - Added `/admin/messages` page to list contact submissions.
-   - Added order status + payment status update UI on `/admin/orders/[id]`.
-   - Added product delete action + button on `/admin/products`.
-   - Added Category and Collection selects to the product form (`/admin/products/new` and `/admin/products/[id]`).
-   - Updated admin shell navigation and dashboard card links to include the new pages.
-
-6. **Contact persons**
-   - Added Abdullah Sikandar (`+92 304 9316562`) and Abdul Wahab (`+92 300 0835875`) to `siteConfig.contacts`.
-   - Displayed all contacts on the Contact page, About page, and Footer.
-   - Added `digitsOnly` and `formatPhoneDisplay` helpers in `src/lib/format.ts`.
-
-7. **Documentation**
-   - Updated `README.md` with recent changes and a note about the `public.is_admin()` SQL error.
+5. **Made motion wrappers degrade gracefully**
+   - `src/components/motion/reveal.tsx` defaults `Reveal` to visible (`opacity: 1, y: 0`) so content is never hidden if JS/intersection observers fail.
 
 ## Verified in this session
 
 - `npm run typecheck` — passes.
 - `npx eslint .` — passes.
 - `npm run build` — passes.
-- Test server on port 9003:
-  - `/collections?search=gold` returns real products.
-  - `/collections?search=Ring` returns rings.
-  - `/collections?search=xyznonexistent` shows "No pieces match your search".
-  - `/this-page-does-not-exist` renders the custom 404 page.
-- End-to-end checkout audit (local test server):
-  - COD order: created successfully, stock decremented, order_items inserted.
-  - Bank-transfer order: created successfully with `payment_proof_path`.
-  - Insufficient-stock, invalid phone, and empty-cart cases return proper 400 errors.
-- Form audits:
-  - `/api/contact` persists to `contact_submissions`.
-  - `/api/custom-design` persists to `custom_design_requests`.
-  - `/api/virtual-try-on` returns success (persistence intentionally no-op until feature rebuild).
-  - `/api/upload/payment-proof` uploads to Supabase Storage `payment-proofs` bucket.
-- Admin route audit:
-  - `/admin/orders` redirects to `/admin/login` when unauthenticated.
-  - `/admin/login` renders the real sign-in form (Supabase Auth) when configured.
-  - Existing admin user: Sikandar Hayat (`c97f3e22-a136-4b4a-9af9-188368b3f07a`).
-- Audit test data was cleaned up and stock levels restored after testing.
+- Production server on `http://localhost:9002`:
+  - Homepage hero text renders.
+  - `/collections` lists real products.
+  - Product detail page renders images, variants, price, and Add/Save/Inquire buttons.
+  - `/contact`, `/about`, `/cart`, `/checkout`, `/admin/login` render without layout errors.
+- End-to-end checkout (headless Chrome via Playwright):
+  - COD order placed successfully.
+  - Stock decremented atomically by `create_order()`.
+  - Redirected to `/checkout/success`.
 
-## Known issue resolved
+## One query to run in the Supabase SQL Editor
 
-`ERROR: 42883: function public.is_admin() does not exist` happens when migrations are run piecemeal instead of as one script. The fix is to run the entire `supabase/_apply_all.sql` in the Supabase SQL Editor as a single query. `_apply_all.sql` creates a stub `is_admin()` before any policies reference it, then replaces it with the real implementation after tables exist.
+If you hit `ERROR: 42883: function public.is_admin() does not exist` (or any missing-function error), open:
 
-## One query to run in Supabase SQL Editor
+```
+supabase/_apply_all.sql
+```
 
-Open `supabase/_apply_all.sql`, copy the **entire file**, paste it into the Supabase SQL Editor, and run it once. It is idempotent (resets first).
+Copy the **entire file** into the Supabase SQL Editor and run it **once**. It is idempotent — it drops public schema objects, recreates tables/enums/RLS/storage policies, defines `is_admin()` and `create_order()`, and seeds the three real products.
 
 ## Current production-ready status
 
 - Build, typecheck, and lint are green.
-- Real products render on homepage, collections, and product detail pages (when Supabase is configured).
+- Real products render on homepage, collections, and product detail pages.
 - Search, cart, checkout, contact, custom-design, virtual-try-on, and admin routes exist.
-- RLS + helper functions are defined in `supabase/_apply_all.sql`.
+- Checkout is hardened with server-authoritative prices, stock checks, and atomic order creation.
+- Admin login uses real Supabase Auth; admin routes are gated by `profiles.is_admin`.
 
-## Remaining work to be world-class / launch-ready
+## Remaining work before launch
 
-The following items still deserve attention before calling the app "complete":
+1. **Admin functional audit** (requires an admin user in Supabase):
+   - Log in to `/admin`, create/edit/delete a product, view orders, update order status, and set gold rates.
+   - Confirm storage bucket policies allow admin image uploads.
 
-1. **End-to-end functional audit**
-   - Walk every public route (home, collections, product detail, cart, checkout success path, contact, custom-design, virtual-try-on) with a real browser and confirm no console errors, no broken images, and correct PKR formatting.
-   - Test the full checkout flow end-to-end (COD + bank transfer with payment proof).
-   - Test admin login, product CRUD, order viewing, and gold-rate update once `is_admin` is set.
+2. **Production environment**
+   - Set `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` on the host.
+   - Run `supabase/_apply_all.sql` once in the production project SQL Editor.
+   - Create an admin user in Supabase Auth and run:
+     ```sql
+     update public.profiles set is_admin = true where id = '<user-uuid>';
+     ```
 
-2. **Admin authentication gap**
-   - `src/app/admin/login/page.tsx` currently says "Authentication is not available yet." Either enable Supabase Auth sign-in or remove the page and gate `/admin/*` via a working mechanism.
+3. **Images / storage**
+   - The seed uses `/Ring1.jpg`, `/Ring2.jpg`, and `/Necklace.jpg` from `/public` for the initial products. Upload production product photos to Supabase Storage `product-images` bucket and update `storage_path` values when ready.
 
-3. **Image hosting**
-   - Product images reference `/Ring1.jpg`, `/Ring2.jpg`, `/Necklace.jpg`, and seeded storage paths. Confirm these exist in production Supabase Storage and that public read policies are active.
+4. **Gold rates**
+   - Either enter rates manually in `/admin/gold-rates` or wire an external API via `GOLD_API_PROVIDER` + `GOLD_API_KEY` env vars.
 
-4. **Gold rate source**
-   - Decide whether the live rate is auto-fetched from an external API or entered manually in admin. The UI and `gold_rates` table support both; the cron/API wiring should be explicit.
+5. **Email (explicitly not required)**
+   - `RESEND_API_KEY` is optional. The app works without it; notifications are logged and skipped.
 
-5. **Email (optional)**
-   - The user explicitly said: "No need for any email integration setup of email and all." App works without `RESEND_API_KEY`; notifications are logged. Leave as-is.
+6. **Deploy**
+   - Choose host (Firebase App Hosting / Vercel). `apphosting.yaml` is present for Firebase App Hosting.
+   - Verify `maxInstances` and environment variables before going live.
 
-6. **Performance / SEO polish**
-   - Add structured data breadcrumbs and product JSON-LD if not present.
-   - Verify all `next/image` usage has correct `sizes` and LCP `priority`.
-   - Run Lighthouse and address any a11y/contrast issues.
+## Business facts (confirmed)
 
-7. **Deploy pipeline**
-   - Choose host (Vercel / Firebase App Hosting). `apphosting.yaml` exists; confirm it matches the target platform.
-   - Set production env vars (`NEXT_PUBLIC_SITE_URL`, Supabase keys) and run the one-shot SQL.
-
-8. **Content / copy**
-   - Replace any remaining placeholder copy with confirmed business facts.
-   - Confirm phone `03009631161` and owner name `Sikandar Hayat` are correct and consistent.
-
-## Business facts (confirmed this session)
-
-- Owner: `Sikandar Hayat` — `03009631161`
-- `Abdullah Sikandar` — `+92 304 9316562`
-- `Abdul Wahab` — `+92 300 0835875`
+- Owner: **Sikandar Hayat** — `0300 9631161`
+- **Abdul Wahab** — `+92 300 0835875`
+- **Abdullah Sikandar** — `+92 304 9316562`
 - Experience: 30+ years in gold jewellery
 - Location: Multan Sarafa Bazar, Shop #2, Pakistan
-- No bank account details needed for now.
-- No email integration needed.
+- No bank account details shown for now.
+- No email integration required.

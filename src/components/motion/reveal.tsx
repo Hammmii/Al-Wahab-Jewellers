@@ -24,7 +24,7 @@ export function Reveal({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y }}
+      initial={{ opacity: 1, y: 0 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-12% 0px' }}
       transition={{ duration: 0.7, delay, ease: EASE }}
@@ -52,7 +52,7 @@ export function Stagger({ children, className }: { children: ReactNode; classNam
     <motion.div
       className={className}
       variants={containerVariants}
-      initial="hidden"
+      initial="show"
       whileInView="show"
       viewport={{ once: true, margin: '-10% 0px' }}
     >

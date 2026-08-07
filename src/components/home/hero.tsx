@@ -5,9 +5,9 @@ import GoldParticles from '@/components/GoldParticles'
 
 export function Hero() {
   return (
-    <section className="bg-hero-pattern relative flex min-h-[92vh] items-center justify-center overflow-hidden">
+    <section className="bg-hero-pattern relative isolate flex min-h-[92vh] items-center justify-center overflow-hidden">
       <GoldParticles />
-      <div className="container relative z-10 px-4 text-center">
+      <div className="container relative z-30 px-4 text-center">
         <Reveal y={16}>
           <p className="font-urdu text-5xl text-gold-shimmer md:text-7xl lg:text-8xl">
             الوَہاب جیولرز

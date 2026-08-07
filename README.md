@@ -88,6 +88,11 @@ npm run start       # Start production server on port 9002
 
 ## Recent changes
 
+- Fixed invisible homepage hero headline (content was behind the GoldParticles canvas).
+- Fixed checkout form validation so the form only validates collected fields; items are merged from the cart.
+- Completed end-to-end checkout test: COD order creates successfully and redirects to `/checkout/success`.
+- Added `Abdullah Sikandar` and `Abdul Wahab` contacts to the Footer alongside `Sikandar Hayat`.
+- Made motion wrappers degrade gracefully so content stays visible even if JS/intersection observers fail.
 - Added working site-wide search in the header and on the collections page (full-text + trigram backed).
 - Added custom bilingual 404 (`not-found.tsx`) and error boundary (`error.tsx`) pages.
 - Cleaned up the stale `rebuild/premium-storefront` branch.

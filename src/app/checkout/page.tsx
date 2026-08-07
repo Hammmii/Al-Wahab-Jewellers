@@ -13,6 +13,12 @@ import { useCart, useCartSubtotal } from '@/lib/stores/cart'
 import { useHydrated } from '@/lib/stores/use-hydrated'
 import { formatPKR } from '@/lib/format'
 import { orderSchema, type OrderInput } from '@/lib/validations'
+import { z } from 'zod'
+
+// The checkout form only collects customer/payment details; cart items are
+// merged in before calling the API. We therefore validate without `items`.
+const checkoutFormSchema = orderSchema.omit({ items: true })
+type CheckoutFormInput = z.infer<typeof checkoutFormSchema>
 import { IconCart } from '@/components/icons'
 import { useT } from '@/lib/i18n/language-context'
 import { useToast } from '@/hooks/use-toast'
@@ -33,8 +39,8 @@ export default function CheckoutPage() {
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<OrderInput>({
-    resolver: zodResolver(orderSchema),
+  } = useForm<CheckoutFormInput>({
+    resolver: zodResolver(checkoutFormSchema),
     defaultValues: { paymentMethod: 'cod' },
   })
 
@@ -56,7 +62,7 @@ export default function CheckoutPage() {
     return json.path as string
   }
 
-  const onSubmit = async (data: OrderInput) => {
+  const onSubmit = async (data: CheckoutFormInput) => {
     let paymentProofPath: string | undefined
 
     if (paymentMethod === 'bank_transfer') {
