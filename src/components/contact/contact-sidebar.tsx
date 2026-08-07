@@ -37,9 +37,8 @@ export function ContactSidebar() {
           {siteConfig.contacts.map((contact) => {
             const digits = digitsOnly(contact.phone)
             return (
-              <li key={contact.phone} className="flex flex-col">
+              <li key={contact.phone} className="flex items-center justify-between gap-3">
                 <span className="text-foreground">{contact.name}</span>
-                <span className="text-xs text-muted-foreground/80">{contact.role}</span>
                 <a
                   href={`tel:+${digits}`}
                   dir="ltr"

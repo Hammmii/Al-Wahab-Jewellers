@@ -60,11 +60,11 @@ export function Footer() {
                 <p>{siteConfig.address.city}, {siteConfig.address.country}</p>
                 <div className="mt-2 space-y-1">
                   {siteConfig.contacts.slice(0, 2).map((contact) => (
-                    <p key={contact.phone}>
+                    <p key={contact.phone} className="flex items-center justify-between gap-3">
+                      <span className="text-muted-foreground">{contact.name}</span>
                       <a href={`tel:+${digitsOnly(contact.phone)}`} dir="ltr" className="text-primary hover:underline">
                         {formatPhoneDisplay(contact.phone)}
                       </a>
-                      <span className="ml-1 text-xs text-muted-foreground/70">({contact.name})</span>
                     </p>
                   ))}
                 </div>

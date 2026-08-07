@@ -21,9 +21,9 @@ export const siteConfig = {
     experience: '30+ years',
   },
   contacts: [
-    { name: 'Sikandar Hayat', phone: '03009631161', role: 'Owner' },
-    { name: 'Abdullah Sikandar', phone: '+92 304 9316562', role: 'Sales' },
-    { name: 'Abdul Wahab', phone: '+92 300 0835875', role: 'Sales' },
+    { name: 'Sikandar Hayat', phone: '03009631161' },
+    { name: 'Abdul Wahab', phone: '+92 300 0835875' },
+    { name: 'Abdullah Sikandar', phone: '+92 304 9316562' },
   ],
   keywords: [
     'gold jewellers Multan',

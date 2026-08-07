@@ -38,14 +38,14 @@ export function AboutStory() {
               <p className="text-sm text-muted-foreground">Led by</p>
               <p className="font-headline text-lg text-foreground">{siteConfig.owner.name}</p>
               <p className="text-sm text-muted-foreground">{siteConfig.owner.experience} in gold jewellery</p>
-              <div className="mt-3 space-y-1">
+              <div className="mt-3 space-y-2">
                 {siteConfig.contacts.map((contact) => (
-                  <p key={contact.phone} className="text-sm">
+                  <div key={contact.phone} className="flex items-center justify-between gap-3 text-sm">
+                    <span className="text-muted-foreground">{contact.name}</span>
                     <a href={`tel:+${digitsOnly(contact.phone)}`} className="text-primary hover:underline">
                       {formatPhoneDisplay(contact.phone)}
                     </a>
-                    <span className="ml-1 text-xs text-muted-foreground">{contact.name}</span>
-                  </p>
+                  </div>
                 ))}
               </div>
             </div>
